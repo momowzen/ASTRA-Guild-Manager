@@ -1,0 +1,371 @@
+const LANG = {
+  en: {
+    topbarTitle: "Guild Manager",
+    menuDashboard: "Dashboard",
+    menuAttendance: "Attendance",
+    menuRanking: "Ranking",
+    menuMembers: "Members",
+    menuBossConfig: "Boss Config",
+    menuHistory: "History",
+    totalMembers: "Members",
+    totalBosses: "Bosses",
+    totalRecords: "Attendance Records",
+    totalPoints: "Guild Points Awarded",
+    recentAttendance: "Recent Attendance",
+    recentActivity: "Recent Activity",
+    topRankings: "Top 10 Rankings",
+    attendance: "Attendance",
+    addMember: "Add Member",
+    bossConfig: "Boss Config",
+    history: "History",
+    uploadScreenshot: "Upload Screenshot",
+    ocrResults: "OCR Results",
+    matchedMembers: "Matched Members",
+    manualSearch: "Manual Member Search",
+    bossSelector: "Select Boss",
+    datePicker: "Select Date & Time",
+    attendanceSummary: "Attendance Summary",
+    save: "Save",
+    cancel: "Cancel",
+    confirm: "Confirm",
+    delete: "Delete",
+    edit: "Edit",
+    view: "View",
+    close: "Close",
+    rank: "Rank",
+    member: "Member",
+    points: "Points",
+    attendanceCount: "Attendance Count",
+    lastAttendance: "Last Attendance",
+    name: "Name",
+    actions: "Actions",
+    search: "Search...",
+    noResults: "No results found",
+    loading: "Loading...",
+    success: "Success",
+    error: "Error",
+    warning: "Warning",
+    info: "Info",
+    confirmSave: "Are you sure you want to save this attendance?",
+    confirmDelete: "Are you sure you want to delete this record?",
+    memberCount: "Member Count",
+    bossPoints: "Boss Points",
+    attendanceDate: "Attendance Date",
+    createdTime: "Created Time",
+    membersList: "Members List",
+    noMembers: "No members added yet",
+    noRecords: "No attendance records found",
+    dragDrop: "Drag & drop or click to upload",
+    ocrProcessing: "Processing OCR...",
+    ocrReady: "OCR Ready",
+    ocrDone: "OCR Complete",
+    ocrFailed: "OCR Failed",
+    ocrNoText: "No text detected",
+    scanAgain: "Scan Again",
+    matchedCount: "{count} members matched",
+    pointsAwarded: "Points Awarded",
+    saveSuccess: "Attendance saved successfully!",
+    clearPoints: "Clear Points",
+    confirmClearPoints: "Are you sure you want to reset all member points to 0? This cannot be undone.",
+    pointsCleared: "All points have been reset to 0",
+    deleteSuccess: "Record deleted successfully",
+    memberAdded: "Member added successfully",
+    memberUpdated: "Member updated successfully",
+    memberDeleted: "Member deleted successfully",
+    bossUpdated: "Boss points updated successfully",
+    addMemberTitle: "Add Members",
+    addMemberBatchHint: "Enter names separated by comma or one per line",
+    editMember: "Edit Member",
+    memberName: "Member Name",
+    confirmDeleteMember: "Are you sure you want to delete this member?",
+    darkMode: "Dark Mode",
+    lightMode: "Light Mode",
+    language: "Language",
+    noImage: "No image uploaded",
+    matchedAutomatically: "Matched Automatically",
+    manuallyAdded: "Manually Added",
+    closeMatches: "Close Matches",
+    noCloseMatches: "No close matches",
+    remove: "Remove",
+    duplicateNotAllowed: "Duplicate member not allowed",
+    today: "Today",
+    all: "All",
+    confirmDeleteAttendance: "This will permanently delete this attendance record. Continue?",
+    pointsAssigned: "Points Assigned",
+    noActivity: "No recent activity",
+    clearHistory: "Clear History",
+    confirmClearHistory: "Are you sure you want to delete ALL attendance history? This cannot be undone.",
+    historyCleared: "All history has been cleared",
+    boss: "Boss",
+    uploadError: "Please upload a PNG or JPG image",
+    clickToView: "CLICK TO VIEW"
+  },
+
+  ko: {
+    topbarTitle: "길드 관리자",
+    menuDashboard: "대시보드",
+    menuAttendance: "출석",
+    menuRanking: "랭킹",
+    menuMembers: "멤버",
+    menuBossConfig: "보스 설정",
+    menuHistory: "기록",
+    totalMembers: "전체 멤버",
+    totalBosses: "전체 보스",
+    totalRecords: "전체 출석 기록",
+    totalPoints: "전체 길드 포인트",
+    recentAttendance: "최근 출석",
+    recentActivity: "최근 활동",
+    topRankings: "TOP 10 랭킹",
+    attendance: "출석",
+    addMember: "멤버 추가",
+    bossConfig: "보스 설정",
+    history: "기록",
+    uploadScreenshot: "스크린샷 업로드",
+    ocrResults: "OCR 결과",
+    matchedMembers: "매칭된 멤버",
+    manualSearch: "멤버 수동 검색",
+    bossSelector: "보스 선택",
+    datePicker: "날짜 및 시간 선택",
+    attendanceSummary: "출석 요약",
+    save: "저장",
+    cancel: "취소",
+    confirm: "확인",
+    delete: "삭제",
+    edit: "수정",
+    view: "보기",
+    close: "닫기",
+    rank: "순위",
+    member: "멤버",
+    points: "포인트",
+    attendanceCount: "출석 횟수",
+    lastAttendance: "마지막 출석",
+    name: "이름",
+    actions: "작업",
+    search: "검색...",
+    noResults: "검색 결과가 없습니다",
+    loading: "로딩 중...",
+    success: "성공",
+    error: "오류",
+    warning: "경고",
+    info: "정보",
+    confirmSave: "이 출석을 저장하시겠습니까?",
+    confirmDelete: "이 기록을 삭제하시겠습니까?",
+    memberCount: "멤버 수",
+    bossPoints: "보스 포인트",
+    attendanceDate: "출석 날짜",
+    createdTime: "생성 시간",
+    membersList: "멤버 목록",
+    noMembers: "추가된 멤버가 없습니다",
+    noRecords: "출석 기록이 없습니다",
+    dragDrop: "드래그 & 드롭 또는 클릭하여 업로드",
+    ocrProcessing: "OCR 처리 중...",
+    ocrReady: "OCR 준비",
+    ocrDone: "OCR 완료",
+    ocrFailed: "OCR 실패",
+    ocrNoText: "텍스트가 감지되지 않았습니다",
+    scanAgain: "다시 스캔",
+    matchedCount: "{count}명의 멤버 매칭됨",
+    pointsAwarded: "지급된 포인트",
+    saveSuccess: "출석이 성공적으로 저장되었습니다!",
+    clearPoints: "포인트 초기화",
+    confirmClearPoints: "모든 멤버의 포인트를 0으로 초기화하시겠습니까? 되돌릴 수 없습니다.",
+    pointsCleared: "모든 포인트가 0으로 초기화되었습니다",
+    deleteSuccess: "기록이 성공적으로 삭제되었습니다",
+    memberAdded: "멤버가 추가되었습니다",
+    memberUpdated: "멤버가 수정되었습니다",
+    memberDeleted: "멤버가 삭제되었습니다",
+    bossUpdated: "보스 포인트가 업데이트되었습니다",
+    addMemberTitle: "멤버 추가",
+    addMemberBatchHint: "쉼표로 구분하거나 한 줄에 하나씩 입력하세요",
+    editMember: "멤버 수정",
+    memberName: "멤버 이름",
+    confirmDeleteMember: "이 멤버를 삭제하시겠습니까?",
+    darkMode: "다크 모드",
+    lightMode: "라이트 모드",
+    language: "언어",
+    noImage: "업로드된 이미지가 없습니다",
+    matchedAutomatically: "자동 매칭됨",
+    manuallyAdded: "수동 추가됨",
+    closeMatches: "근접 일치",
+    noCloseMatches: "근접 일치 항목 없음",
+    remove: "제거",
+    duplicateNotAllowed: "중복 멤버는 추가할 수 없습니다",
+    today: "오늘",
+    all: "전체",
+    confirmDeleteAttendance: "이 출석 기록이 영구 삭제됩니다. 계속하시겠습니까?",
+    pointsAssigned: "할당된 포인트",
+    noActivity: "최근 활동이 없습니다",
+    clearHistory: "기록 삭제",
+    confirmClearHistory: "모든 출석 기록을 삭제하시겠습니까? 되돌릴 수 없습니다.",
+    historyCleared: "모든 기록이 삭제되었습니다",
+    boss: "보스",
+    uploadError: "PNG 또는 JPG 이미지를 업로드해주세요",
+    clickToView: "클릭하여 보기"
+  },
+
+  ja: {
+    topbarTitle: "ギルド管理",
+    menuDashboard: "ダッシュボード",
+    menuAttendance: "出席",
+    menuRanking: "ランキング",
+    menuMembers: "メンバー",
+    menuBossConfig: "ボス設定",
+    menuHistory: "履歴",
+    totalMembers: "総メンバー数",
+    totalBosses: "総ボス数",
+    totalRecords: "総出席記録",
+    totalPoints: "総ギルドポイント",
+    recentAttendance: "最近の出席",
+    recentActivity: "最近の活動",
+    topRankings: "トップ10ランキング",
+    attendance: "出席",
+    addMember: "メンバー追加",
+    bossConfig: "ボス設定",
+    history: "履歴",
+    uploadScreenshot: "スクリーンショットをアップロード",
+    ocrResults: "OCR結果",
+    matchedMembers: "一致したメンバー",
+    manualSearch: "手動メンバー検索",
+    bossSelector: "ボスを選択",
+    datePicker: "日時を選択",
+    attendanceSummary: "出席サマリー",
+    save: "保存",
+    cancel: "キャンセル",
+    confirm: "確認",
+    delete: "削除",
+    edit: "編集",
+    view: "表示",
+    close: "閉じる",
+    rank: "順位",
+    member: "メンバー",
+    points: "ポイント",
+    attendanceCount: "出席回数",
+    lastAttendance: "最終出席",
+    name: "名前",
+    actions: "操作",
+    search: "検索...",
+    noResults: "結果が見つかりません",
+    loading: "読み込み中...",
+    success: "成功",
+    error: "エラー",
+    warning: "警告",
+    info: "情報",
+    confirmSave: "この出席を保存してもよろしいですか？",
+    confirmDelete: "この記録を削除してもよろしいですか？",
+    memberCount: "メンバー数",
+    bossPoints: "ボスポイント",
+    attendanceDate: "出席日",
+    createdTime: "作成時間",
+    membersList: "メンバーリスト",
+    noMembers: "追加されたメンバーはいません",
+    noRecords: "出席記録がありません",
+    dragDrop: "ドラッグ＆ドロップまたはクリックしてアップロード",
+    ocrProcessing: "OCR処理中...",
+    ocrReady: "OCR準備完了",
+    ocrDone: "OCR完了",
+    ocrFailed: "OCR失敗",
+    ocrNoText: "テキストが検出されませんでした",
+    scanAgain: "再スキャン",
+    matchedCount: "{count}人のメンバーが一致",
+    pointsAwarded: "付与ポイント",
+    saveSuccess: "出席が正常に保存されました！",
+    clearPoints: "ポイントクリア",
+    confirmClearPoints: "全てのメンバーのポイントを0にリセットしてもよろしいですか？この操作は元に戻せません。",
+    pointsCleared: "全てのポイントが0にリセットされました",
+    deleteSuccess: "記録が正常に削除されました",
+    memberAdded: "メンバーが追加されました",
+    memberUpdated: "メンバーが更新されました",
+    memberDeleted: "メンバーが削除されました",
+    bossUpdated: "ボスポイントが更新されました",
+    addMemberTitle: "メンバー追加",
+    addMemberBatchHint: "カンマ区切りまたは1行に1つずつ入力",
+    editMember: "メンバー編集",
+    memberName: "メンバー名",
+    confirmDeleteMember: "このメンバーを削除してもよろしいですか？",
+    darkMode: "ダークモード",
+    lightMode: "ライトモード",
+    language: "言語",
+    noImage: "画像がアップロードされていません",
+    matchedAutomatically: "自動一致",
+    manuallyAdded: "手動追加",
+    closeMatches: "類似候補",
+    noCloseMatches: "類似候補なし",
+    remove: "削除",
+    duplicateNotAllowed: "重複メンバーは追加できません",
+    today: "今日",
+    all: "すべて",
+    confirmDeleteAttendance: "この出席記録は完全に削除されます。続行しますか？",
+    pointsAssigned: "割り当てポイント",
+    noActivity: "最近の活動はありません",
+    clearHistory: "履歴をクリア",
+    confirmClearHistory: "全ての出席履歴を削除してもよろしいですか？この操作は元に戻せません。",
+    historyCleared: "全ての履歴がクリアされました",
+    boss: "ボス",
+    uploadError: "PNGまたはJPG画像をアップロードしてください",
+    clickToView: "クリックして表示"
+  }
+};
+
+let currentLang = "en";
+
+function t(key, ...args) {
+  const langData = LANG[currentLang] || LANG.en;
+  let value = langData[key];
+  if (!value) {
+    value = LANG.en[key] || key;
+  }
+  if (args.length > 0) {
+    value = value.replace(/\{(\w+)\}/g, (match, p1) => {
+      return args[0][p1] !== undefined ? args[0][p1] : match;
+    });
+  }
+  return value;
+}
+
+function setLanguage(lang) {
+  if (LANG[lang]) {
+    currentLang = lang;
+    localStorage.setItem("astra_lang", lang);
+    updateAllLabels();
+  }
+}
+
+function loadLanguage() {
+  const saved = localStorage.getItem("astra_lang");
+  if (saved && LANG[saved]) {
+    currentLang = saved;
+  }
+}
+
+function updateAllLabels() {
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.dataset.i18n;
+    el.textContent = t(key);
+  });
+
+  document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+    const key = el.dataset.i18nPlaceholder;
+    el.placeholder = t(key);
+  });
+
+  document.querySelectorAll("[data-i18n-title]").forEach(el => {
+    const key = el.dataset.i18nTitle;
+    el.title = t(key);
+  });
+
+  const langToggle = document.getElementById("langToggle");
+  if (langToggle) {
+    langToggle.textContent = currentLang.toUpperCase();
+  }
+
+  if (typeof renderPageLabels === "function") {
+    renderPageLabels();
+  }
+}
+
+function getBossName(boss) {
+  if (!boss) return "";
+  if (currentLang === "ko") return boss.ko || boss.en;
+  if (currentLang === "ja") return boss.ja || boss.en;
+  return boss.en;
+}
