@@ -339,6 +339,18 @@
   text-align: center;
 }
 
+#historyPage.page-active {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+#historyPage.page-active .history-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
 .page {
   display: none;
 }
