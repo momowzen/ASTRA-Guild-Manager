@@ -1,46 +1,33 @@
 :root {
-  --primary: #6c63ff;
-  --primary-hover: #5a52e0;
-  --primary-light: rgba(108, 99, 255, 0.1);
-  --danger: #ef4444;
-  --danger-hover: #dc2626;
-  --success: #22c55e;
-  --warning: #f59e0b;
-  --info: #3b82f6;
-  --bg: #f0f2f5;
-  --bg-card: #ffffff;
-  --bg-sidebar: #1e1e2d;
-  --bg-sidebar-hover: #2a2a3d;
-  --bg-topbar: #ffffff;
-  --text: #1f2937;
-  --text-secondary: #6b7280;
-  --text-sidebar: #a2a3b7;
-  --text-sidebar-active: #ffffff;
-  --border: #e5e7eb;
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);
-  --radius: 12px;
-  --radius-sm: 8px;
-  --radius-xs: 4px;
+  --primary: #f0c040;
+  --primary-hover: #d4a830;
+  --primary-light: rgba(240, 192, 64, 0.12);
+  --primary-glow: rgba(240, 192, 64, 0.3);
+  --danger: #dc3545;
+  --danger-hover: #b02a37;
+  --success: #28a745;
+  --warning: #e67e22;
+  --info: #3498db;
+  --bg: #0d0d1a;
+  --bg-card: #14142b;
+  --bg-sidebar: #08081a;
+  --bg-sidebar-hover: #1a1a3e;
+  --bg-topbar: #101028;
+  --text: #e8e8f0;
+  --text-secondary: #8888a0;
+  --text-sidebar: #666688;
+  --text-sidebar-active: #f0c040;
+  --border: #2a2a50;
+  --border-glow: rgba(240, 192, 64, 0.15);
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 12px rgba(240, 192, 64, 0.15);
+  --radius: 8px;
+  --radius-sm: 4px;
+  --radius-xs: 2px;
   --transition: 0.2s ease;
   --font: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-}
-
-[data-theme="dark"] {
-  --bg: #1a1a2e;
-  --bg-card: #16213e;
-  --bg-sidebar: #0f0f23;
-  --bg-sidebar-hover: #1a1a35;
-  --bg-topbar: #16213e;
-  --text: #e5e7eb;
-  --text-secondary: #9ca3af;
-  --text-sidebar: #6b7280;
-  --text-sidebar-active: #ffffff;
-  --border: #2d2d4a;
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 * {

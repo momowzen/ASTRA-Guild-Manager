@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   await loadBossConfig();
 
   setupNavigation();
-  setupThemeToggle();
   setupLanguageToggle();
   navigateTo("dashboard");
 });
@@ -67,23 +66,6 @@ async function renderPage(page) {
       renderHistoryPage();
       break;
   }
-}
-
-function setupThemeToggle() {
-  const toggle = $("themeToggle");
-  if (!toggle) return;
-
-  const savedTheme = localStorage.getItem("astra_theme") || "light";
-  document.documentElement.setAttribute("data-theme", savedTheme);
-  toggle.textContent = savedTheme === "dark" ? "☀️" : "🌙";
-
-  toggle.addEventListener("click", () => {
-    const current = document.documentElement.getAttribute("data-theme");
-    const next = current === "dark" ? "light" : "dark";
-    document.documentElement.setAttribute("data-theme", next);
-    localStorage.setItem("astra_theme", next);
-    toggle.textContent = next === "dark" ? "☀️" : "🌙";
-  });
 }
 
 function setupLanguageToggle() {
