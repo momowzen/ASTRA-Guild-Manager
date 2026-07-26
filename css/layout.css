@@ -331,8 +331,20 @@
   width: 160px;
 }
 
+#bossConfigPage.page-active {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 #bossConfigPage.page-active .table {
   table-layout: auto;
+}
+
+#bossConfigPage.page-active .table-container {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 #bossConfigPage.page-active .table th:first-child,
