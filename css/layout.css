@@ -367,6 +367,13 @@
 #historyPage.page-active .history-list {
   flex: 1;
   min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+#historyPage.page-active .history-list .table-container {
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
 }
 
