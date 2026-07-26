@@ -6,7 +6,8 @@ let attendanceState = {
   selectedBoss: null,
   selectedDate: jstDatetimeString(),
   isProcessing: false,
-  uploadedFiles: []
+  uploadedFiles: [],
+  _saving: false
 };
 
 function renderAttendancePage() {
@@ -375,117 +376,6 @@ function addCloseMatch(index) {
   updateAttendanceSummary();
 }
 
-function renderManualMemberList() {
-  const list = $("manualMemberList");
-  if (!list) return;
-  filterManualMemberList();
-}
-
-function filterManualMemberList() {
-  const list = $("manualMemberList");
-  const searchInput = $("manualMemberSearch");
-  if (!list) return;
-
-  const searchTerm = (searchInput ? searchInput.value : "").toLowerCase();
-  const selectedIds = new Set(attendanceState.selectedMembers.map(m => m.id));
-
-  const available = membersCache.filter(m => !selectedIds.has(m.id));
-  const filtered = searchTerm
-    ? available.filter(m => m.name.toLowerCase().includes(searchTerm))
-    : available;
-  const display = filtered;
-
-  if (display.length === 0) {
-    list.innerHTML = `<div class="select-empty">${t("noResults")}</div>`;
-    return;
-  }
-
-  list.innerHTML = display.map(m => `
-    <div class="select-item" onclick="addManualMember('${m.id}')">
-      ${escapeHtml(m.name)}
-    </div>
-  `).join("");
-}
-
-function addManualMember(id) {
-  const member = getMemberById(id);
-  if (!member) return;
-
-  if (attendanceState.selectedMembers.find(m => m.id === id)) {
-    showToast(t("duplicateNotAllowed"), "warning");
-    return;
-  }
-
-  attendanceState.selectedMembers.push({
-    id: member.id,
-    name: member.name,
-    confidence: 100,
-    source: "manual"
-  });
-
-  renderMatchedMembers();
-  filterManualMemberList();
-  updateAttendanceSummary();
-}
-
-function renderBossList() {
-  const list = $("bossList");
-  if (!list) return;
-  filterBossList();
-}
-
-function filterBossList() {
-  const list = $("bossList");
-  const searchInput = $("bossSearch");
-  if (!list) return;
-
-  const searchTerm = (searchInput ? searchInput.value : "").toLowerCase();
-
-  const filtered = searchTerm
-    ? BOSSES.filter(b => {
-        const name = getBossName(b).toLowerCase();
-        return name.includes(searchTerm) || b.id.includes(searchTerm);
-      })
-    : BOSSES;
-
-  if (filtered.length === 0) {
-    list.innerHTML = `<div class="select-empty">${t("noResults")}</div>`;
-    return;
-  }
-
-  list.innerHTML = filtered.map(b => `
-    <div class="select-item" onclick="selectBoss('${b.id}')">
-      ${escapeHtml(getBossName(b))} (${b.points} ${t("points")})
-    </div>
-  `).join("");
-}
-
-function selectBoss(bossId) {
-  const boss = BOSSES.find(b => b.id === bossId);
-  if (!boss) return;
-
-  attendanceState.selectedBoss = bossId;
-
-  const chip = $("selectedBossChip");
-  const display = $("selectedBossDisplay");
-  if (chip && display) {
-    chip.innerHTML = `${escapeHtml(getBossName(boss))} (${boss.points} ${t("points")}) <button class="chip-remove" onclick="clearBossSelection()">&times;</button>`;
-    display.classList.remove("hidden");
-  }
-
-  const searchInput = $("bossSearch");
-  if (searchInput) searchInput.value = "";
-  filterBossList();
-  updateAttendanceSummary();
-}
-
-function clearBossSelection() {
-  attendanceState.selectedBoss = null;
-  const display = $("selectedBossDisplay");
-  if (display) display.classList.add("hidden");
-  updateAttendanceSummary();
-}
-
 function updateAttendanceSummary() {
   const bossEl = $("summaryBoss");
   const pointsEl = $("summaryPoints");
@@ -516,6 +406,7 @@ function updateAttendanceSummary() {
 }
 
 async function saveAttendance() {
+  if (attendanceState._saving) return;
   if (!attendanceState.selectedBoss) {
     showToast(t("bossSelector") + " " + t("error"), "warning");
     return;
@@ -528,6 +419,7 @@ async function saveAttendance() {
     showToast(t("datePicker") + " " + t("error"), "warning");
     return;
   }
+  attendanceState._saving = true;
 
   const boss = BOSSES.find(b => b.id === attendanceState.selectedBoss);
   const bossName = getBossName(boss);
@@ -537,7 +429,10 @@ async function saveAttendance() {
   const summaryMsg = `${t("confirmSave")}\n\n${t("bossSelector")}: ${bossName}\n${t("bossPoints")}: ${bossPoints}\n${t("attendanceDate")}: ${attendanceState.selectedDate}\n${t("memberCount")}: ${attendanceState.selectedMembers.length}\n${t("membersList")}: ${memberNames.join(", ")}`;
 
   const confirmed = await showConfirm(summaryMsg);
-  if (!confirmed) return;
+  if (!confirmed) {
+    attendanceState._saving = false;
+    return;
+  }
 
   showLoading(true);
   try {
@@ -570,6 +465,7 @@ async function saveAttendance() {
     console.error("Save error:", err);
     showToast(t("error") + ": " + err.message, "error");
   } finally {
+    attendanceState._saving = false;
     showLoading(false);
   }
 }

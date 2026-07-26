@@ -190,13 +190,50 @@ function showAddMemberDialog() {
 function showEditMemberDialog(id) {
   const member = getMemberById(id);
   if (!member) return;
-  const name = prompt(t("memberName"), member.name);
-  if (name && name.trim() && name.trim() !== member.name) {
-    updateMember(id, { name: name.trim() }).then(() => {
+
+  const overlay = createElement("div", "confirm-overlay");
+  const dialog = createElement("div", "confirm-dialog");
+  dialog.style.maxWidth = "420px";
+
+  dialog.innerHTML = `
+    <h3 style="margin-bottom:12px;font-size:18px;">${t("editMember")}</h3>
+    <input type="text" id="editMemberInput" class="input" value="${escapeHtml(member.name)}" style="margin-bottom:12px;">
+    <div style="display:flex;gap:12px;justify-content:flex-end;">
+      <button class="btn btn-secondary" id="cancelEditBtn">${t("cancel")}</button>
+      <button class="btn btn-primary" id="confirmEditBtn">${t("save")}</button>
+    </div>
+  `;
+
+  overlay.appendChild(dialog);
+  document.body.appendChild(overlay);
+  requestAnimationFrame(() => overlay.classList.add("confirm-visible"));
+
+  const input = dialog.querySelector("#editMemberInput");
+  input.focus();
+  input.select();
+
+  const cleanup = () => {
+    overlay.classList.remove("confirm-visible");
+    setTimeout(() => overlay.remove(), 300);
+  };
+
+  dialog.querySelector("#cancelEditBtn").onclick = cleanup;
+  overlay.onclick = e => { if (e.target === overlay) cleanup(); };
+
+  dialog.querySelector("#confirmEditBtn").onclick = async () => {
+    const name = input.value.trim();
+    if (name && name !== member.name) {
+      await updateMember(id, { name });
       renderMembersPage();
       showToast(t("memberUpdated"), "success");
-    });
-  }
+    }
+    cleanup();
+  };
+
+  input.onkeydown = e => {
+    if (e.key === "Enter") dialog.querySelector("#confirmEditBtn").click();
+    if (e.key === "Escape") cleanup();
+  };
 }
 
 async function confirmDeleteMember(id) {
@@ -206,4 +243,57 @@ async function confirmDeleteMember(id) {
     renderMembersPage();
     showToast(t("memberDeleted"), "success");
   }
+}
+
+function renderManualMemberList() {
+  const list = $("manualMemberList");
+  if (!list) return;
+  filterManualMemberList();
+}
+
+function filterManualMemberList() {
+  const list = $("manualMemberList");
+  const searchInput = $("manualMemberSearch");
+  if (!list) return;
+
+  const searchTerm = (searchInput ? searchInput.value : "").toLowerCase();
+  const selectedIds = new Set(attendanceState.selectedMembers.map(m => m.id));
+
+  const available = membersCache.filter(m => !selectedIds.has(m.id));
+  const filtered = searchTerm
+    ? available.filter(m => m.name.toLowerCase().includes(searchTerm))
+    : available;
+  const display = filtered;
+
+  if (display.length === 0) {
+    list.innerHTML = `<div class="select-empty">${t("noResults")}</div>`;
+    return;
+  }
+
+  list.innerHTML = display.map(m => `
+    <div class="select-item" onclick="addManualMember('${m.id}')">
+      ${escapeHtml(m.name)}
+    </div>
+  `).join("");
+}
+
+function addManualMember(id) {
+  const member = getMemberById(id);
+  if (!member) return;
+
+  if (attendanceState.selectedMembers.find(m => m.id === id)) {
+    showToast(t("duplicateNotAllowed"), "warning");
+    return;
+  }
+
+  attendanceState.selectedMembers.push({
+    id: member.id,
+    name: member.name,
+    confidence: 100,
+    source: "manual"
+  });
+
+  renderMatchedMembers();
+  filterManualMemberList();
+  updateAttendanceSummary();
 }

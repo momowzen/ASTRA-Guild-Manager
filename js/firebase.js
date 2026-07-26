@@ -11,8 +11,6 @@ function initFirebase() {
       firebase.initializeApp(firebaseConfig);
     }
     db = firebase.firestore();
-    const settings = { merge: true };
-    db.settings(settings);
     localStorage.removeItem("astra_local_db");
     return true;
   } catch (e) {
@@ -25,9 +23,11 @@ function getDb() {
   return db;
 }
 
-async function getCollection(collectionName) {
+async function getCollection(collectionName, limitCount) {
   if (!db) return [];
-  const snapshot = await db.collection(collectionName).get();
+  let query = db.collection(collectionName);
+  if (limitCount > 0) query = query.limit(limitCount);
+  const snapshot = await query.get();
   const items = [];
   snapshot.forEach(doc => {
     items.push({ id: doc.id, ...doc.data() });

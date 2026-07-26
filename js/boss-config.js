@@ -83,3 +83,61 @@ function adjustBossPoints(bossId, delta) {
   if (input) input.value = newPoints;
   saveBossPoints(bossId, newPoints);
 }
+
+function renderBossList() {
+  const list = $("bossList");
+  if (!list) return;
+  filterBossList();
+}
+
+function filterBossList() {
+  const list = $("bossList");
+  const searchInput = $("bossSearch");
+  if (!list) return;
+
+  const searchTerm = (searchInput ? searchInput.value : "").toLowerCase();
+
+  const filtered = searchTerm
+    ? BOSSES.filter(b => {
+        const name = getBossName(b).toLowerCase();
+        return name.includes(searchTerm) || b.id.includes(searchTerm);
+      })
+    : BOSSES;
+
+  if (filtered.length === 0) {
+    list.innerHTML = `<div class="select-empty">${t("noResults")}</div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(b => `
+    <div class="select-item" onclick="selectBoss('${b.id}')">
+      ${escapeHtml(getBossName(b))} (${b.points} ${t("points")})
+    </div>
+  `).join("");
+}
+
+function selectBoss(bossId) {
+  const boss = BOSSES.find(b => b.id === bossId);
+  if (!boss) return;
+
+  attendanceState.selectedBoss = bossId;
+
+  const chip = $("selectedBossChip");
+  const display = $("selectedBossDisplay");
+  if (chip && display) {
+    chip.innerHTML = `${escapeHtml(getBossName(boss))} (${boss.points} ${t("points")}) <button class="chip-remove" onclick="clearBossSelection()">&times;</button>`;
+    display.classList.remove("hidden");
+  }
+
+  const searchInput = $("bossSearch");
+  if (searchInput) searchInput.value = "";
+  filterBossList();
+  updateAttendanceSummary();
+}
+
+function clearBossSelection() {
+  attendanceState.selectedBoss = null;
+  const display = $("selectedBossDisplay");
+  if (display) display.classList.add("hidden");
+  updateAttendanceSummary();
+}

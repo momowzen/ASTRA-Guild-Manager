@@ -112,9 +112,11 @@ async function clearAllHistory() {
   const confirmed = await showConfirm(t("confirmClearHistory"));
   if (confirmed) {
     const records = await getCollection("attendance");
-    for (const rec of records) {
-      await deleteDocument("attendance", rec.id);
-    }
+    const batch = db.batch();
+    records.forEach(rec => {
+      batch.delete(db.collection("attendance").doc(rec.id));
+    });
+    await batch.commit();
     renderHistoryPage();
     showToast(t("historyCleared"), "success");
   }
