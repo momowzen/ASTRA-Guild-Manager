@@ -13,8 +13,8 @@ async function renderDashboard() {
 
   const recentRecords = [...attendanceRecords]
     .sort((a, b) => {
-      const da = a.createdAt ? new Date(a.createdAt) : new Date(0);
-      const db = b.createdAt ? new Date(b.createdAt) : new Date(0);
+      const da = a.createdAt ? (a.createdAt.toDate ? a.createdAt.toDate() : new Date(a.createdAt)) : new Date(0);
+      const db = b.createdAt ? (b.createdAt.toDate ? b.createdAt.toDate() : new Date(b.createdAt)) : new Date(0);
       return db - da;
     })
     .slice(0, 5);
