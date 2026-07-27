@@ -711,7 +711,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
-  flex: 1;
+  flex: 2;
   min-height: 0;
   overflow: hidden;
 }
@@ -729,7 +729,7 @@
 }
 
 .attendance-left .card-matched-members {
-  flex: 3;
+  flex: 1;
   min-height: 0;
   overflow-y: auto;
 }
