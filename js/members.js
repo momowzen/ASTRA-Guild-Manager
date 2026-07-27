@@ -77,7 +77,7 @@ function renderMemberRows(members) {
   return members.map(m => `
     <tr>
       <td>${escapeHtml(m.name)}</td>
-      <td>${m.combatPower || 0}</td>
+      <td>${(m.combatPower || 0).toLocaleString()}</td>
       <td class="actions-cell">
         <button class="btn btn-sm btn-secondary" onclick="showEditMemberDialog('${m.id}')" data-i18n="edit">${t("edit")}</button>
         <button class="btn btn-sm btn-danger" onclick="confirmDeleteMember('${m.id}')" data-i18n="delete">${t("delete")}</button>
@@ -218,7 +218,7 @@ function showEditMemberDialog(id) {
     <label style="display:block;font-size:13px;color:var(--text-secondary);margin-bottom:4px;">${t("name")}</label>
     <input type="text" id="editMemberInput" class="input" value="${escapeHtml(member.name)}" style="margin-bottom:12px;">
     <label style="display:block;font-size:13px;color:var(--text-secondary);margin-bottom:4px;">${t("combatPower")}</label>
-    <input type="number" id="editCpInput" class="input" value="${member.combatPower || 0}" min="0" style="margin-bottom:12px;">
+    <input type="text" id="editCpInput" class="input" value="${(member.combatPower || 0).toLocaleString()}" min="0" style="margin-bottom:12px;">
     <div style="display:flex;gap:12px;justify-content:flex-end;">
       <button class="btn btn-secondary" id="cancelEditBtn">${t("cancel")}</button>
       <button class="btn btn-primary" id="confirmEditBtn">${t("save")}</button>
@@ -244,7 +244,7 @@ function showEditMemberDialog(id) {
 
   dialog.querySelector("#confirmEditBtn").onclick = async () => {
     const name = nameInput.value.trim();
-    const combatPower = parseInt(cpInput.value, 10) || 0;
+    const combatPower = parseInt(cpInput.value.replace(/,/g, ""), 10) || 0;
     const updateData = { combatPower };
     if (name && name !== member.name) {
       updateData.name = name;
