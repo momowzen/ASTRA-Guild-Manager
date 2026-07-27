@@ -55,7 +55,7 @@ const LANG = {
     createdTime: "Created Time",
     membersList: "Members List",
     noMembers: "No members added yet",
-    noRecords: "No attendance records found",
+    noRecords: "No records found",
     dragDrop: "Drag & drop or click to upload",
     ocrProcessing: "Processing OCR...",
     ocrReady: "OCR Ready",

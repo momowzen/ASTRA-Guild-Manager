@@ -315,7 +315,7 @@ async function showMemberProfile(id) {
   const overlay = createElement("div", "view-dialog-overlay");
   let historyRows = "";
   if (history.length === 0) {
-    historyRows = `<tr><td colspan="3" class="empty-state">No records found</td></tr>`;
+    historyRows = `<tr><td colspan="3" class="empty-state">${t("noRecords")}</td></tr>`;
   } else {
     historyRows = history.map(h => {
       const dateStr = h.timestamp ? formatDateTime(h.timestamp) : "-";
