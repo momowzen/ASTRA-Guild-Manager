@@ -42,17 +42,19 @@ function renderAttendancePage() {
           <div id="previewContainer" class="preview-container"><div id="previewList" class="preview-thumb-list"></div></div>
         </div>
 
-        <div class="card card-ocr-results">
-          <h3 data-i18n="ocrResults">${t("ocrResults")}</h3>
-          <div id="ocrResults" class="ocr-results">
-            <p class="empty-state" data-i18n="noImage">${t("noImage")}</p>
+        <div class="attendance-row">
+          <div class="card card-ocr-results">
+            <h3 data-i18n="ocrResults">${t("ocrResults")}</h3>
+            <div id="ocrResults" class="ocr-results">
+              <p class="empty-state" data-i18n="noImage">${t("noImage")}</p>
+            </div>
           </div>
-        </div>
 
-        <div class="card card-close-matches">
-          <h3 data-i18n="closeMatches">${t("closeMatches")}</h3>
-          <div id="closeMatchesContainer" class="close-matches-list">
-            <p class="empty-state" data-i18n="noCloseMatches">${t("noCloseMatches")}</p>
+          <div class="card card-close-matches">
+            <h3 data-i18n="closeMatches">${t("closeMatches")}</h3>
+            <div id="closeMatchesContainer" class="close-matches-list">
+              <p class="empty-state" data-i18n="noCloseMatches">${t("noCloseMatches")}</p>
+            </div>
           </div>
         </div>
 
