@@ -50,6 +50,16 @@ async function deleteMember(id) {
   membersCache = membersCache.filter(m => m.id !== id);
 }
 
+async function saveCombatPowerChange(memberId, memberName, oldValue, newValue) {
+  await addDocument("memberCpHistory", {
+    memberId,
+    memberName,
+    oldValue,
+    newValue,
+    timestamp: nowJST()
+  });
+}
+
 async function rewardMemberPoints(id, points) {
   const member = getMemberById(id);
   if (!member) return;
@@ -76,7 +86,7 @@ function renderMemberRows(members) {
   }
   return members.map(m => `
     <tr>
-      <td>${escapeHtml(m.name)}</td>
+      <td><a href="#" onclick="showMemberProfile('${m.id}');return false" style="text-decoration:none;color:inherit;">${escapeHtml(m.name)}</a></td>
       <td>${(m.combatPower || 0).toLocaleString()}</td>
       <td class="actions-cell">
         <button class="btn btn-sm btn-secondary" onclick="showEditMemberDialog('${m.id}')" data-i18n="edit">${t("edit")}</button>
@@ -245,11 +255,15 @@ function showEditMemberDialog(id) {
   dialog.querySelector("#confirmEditBtn").onclick = async () => {
     const name = nameInput.value.trim();
     const combatPower = parseInt(cpInput.value.replace(/,/g, ""), 10) || 0;
+    const oldCp = member.combatPower || 0;
     const updateData = { combatPower };
     if (name && name !== member.name) {
       updateData.name = name;
     }
     await updateMember(id, updateData);
+    if (combatPower !== oldCp) {
+      await saveCombatPowerChange(id, member.name, oldCp, combatPower);
+    }
     renderMembersPage();
     showToast(t("memberUpdated"), "success");
     cleanup();
@@ -259,6 +273,63 @@ function showEditMemberDialog(id) {
     if (e.key === "Enter") dialog.querySelector("#confirmEditBtn").click();
     if (e.key === "Escape") cleanup();
   };
+}
+
+async function showMemberProfile(id) {
+  const member = getMemberById(id);
+  if (!member) return;
+
+  const history = await queryCollection("memberCpHistory", "memberId", "==", id);
+  history.sort((a, b) => {
+    const da = a.timestamp ? (a.timestamp.toDate ? a.timestamp.toDate() : new Date(a.timestamp)) : new Date(0);
+    const db = b.timestamp ? (b.timestamp.toDate ? b.timestamp.toDate() : new Date(b.timestamp)) : new Date(0);
+    return db - da;
+  });
+
+  const overlay = createElement("div", "view-dialog-overlay");
+  let historyRows = "";
+  if (history.length === 0) {
+    historyRows = `<tr><td colspan="3" class="empty-state">${t("noRecords")}</td></tr>`;
+  } else {
+    historyRows = history.map(h => {
+      const dateStr = h.timestamp ? formatDateTime(h.timestamp) : "-";
+      const oldVal = (h.oldValue || 0).toLocaleString();
+      const newVal = (h.newValue || 0).toLocaleString();
+      const arrow = oldVal !== newVal ? `${oldVal} → ${newVal}` : `${newVal} (${t("noChange")})";
+      return `<tr><td>${dateStr}</td><td>${arrow}</td></tr>`;
+    }).join("");
+  }
+
+  overlay.innerHTML = `
+    <div class="profile-dialog">
+      <div class="profile-header">
+        <div class="profile-avatar">${escapeHtml(member.name.charAt(0).toUpperCase())}</div>
+        <div>
+          <h3>${escapeHtml(member.name)}</h3>
+          <span class="profile-cp">${t("combatPower")}: <strong>${(member.combatPower || 0).toLocaleString()}</strong></span>
+        </div>
+      </div>
+      <div class="profile-section">
+        <h4>${t("cpHistory")}</h4>
+        <div class="table-container" style="max-height:300px;overflow-y:auto;">
+          <table class="table" style="table-layout:auto;">
+            <thead>
+              <tr>
+                <th>${t("date")}</th>
+                <th>${t("combatPower")}</th>
+              </tr>
+            </thead>
+            <tbody>${historyRows}</tbody>
+          </table>
+        </div>
+      </div>
+      <div class="view-dialog-actions">
+        <button class="btn btn-primary" onclick="this.closest('.view-dialog-overlay').remove()">${t("close")}</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  overlay.onclick = e => { if (e.target === overlay) overlay.remove(); };
 }
 
 function toggleSort(field) {

@@ -98,7 +98,10 @@ const LANG = {
     boss: "Boss",
     uploadError: "Please upload a PNG or JPG image",
     clickToView: "CLICK TO VIEW",
-    combatPower: "Combat Power"
+    combatPower: "Combat Power",
+    cpHistory: "Combat Power History",
+    noChange: "No change",
+    date: "Date"
   },
 
   ko: {
@@ -200,7 +203,10 @@ const LANG = {
     boss: "보스",
     uploadError: "PNG 또는 JPG 이미지를 업로드해주세요",
     clickToView: "클릭하여 보기",
-    combatPower: "전투력"
+    combatPower: "전투력",
+    cpHistory: "전투력 변동 기록",
+    noChange: "변경 없음",
+    date: "날짜"
   },
 
   ja: {
@@ -302,7 +308,10 @@ const LANG = {
     boss: "ボス",
     uploadError: "PNGまたはJPG画像をアップロードしてください",
     clickToView: "クリックして表示",
-    combatPower: "戦闘力"
+    combatPower: "戦闘力",
+    cpHistory: "戦闘力の履歴",
+    noChange: "変更なし",
+    date: "日付"
   }
 };
 
