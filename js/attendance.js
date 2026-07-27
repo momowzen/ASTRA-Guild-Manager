@@ -14,6 +14,15 @@ function renderAttendancePage() {
   const container = $("attendancePage");
   if (!container) return;
 
+  attendanceState.uploadedFiles = [];
+  attendanceState.ocrNames = [];
+  attendanceState.matchedResults = [];
+  attendanceState.selectedMembers = [];
+  attendanceState.closeMatches = [];
+  attendanceState.selectedBoss = null;
+  attendanceState.isProcessing = false;
+  attendanceState._saving = false;
+
   container.innerHTML = `
     <div class="attendance-layout">
       <div class="attendance-left">
