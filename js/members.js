@@ -295,8 +295,9 @@ async function showMemberProfile(id) {
       const dateStr = h.timestamp ? formatDateTime(h.timestamp) : "-";
       const oldVal = (h.oldValue || 0).toLocaleString();
       const newVal = (h.newValue || 0).toLocaleString();
-      const arrow = oldVal !== newVal ? `${oldVal} → ${newVal}` : `${newVal} (${t("noChange")})";
-      return `<tr><td>${dateStr}</td><td>${arrow}</td></tr>`;
+      var arrow = oldVal + " -> " + newVal;
+      if (oldVal === newVal) { arrow = newVal + " (" + t("noChange") + ")"; }
+      return "<tr><td>" + dateStr + "</td><td>" + arrow + "</td></tr>";
     }).join("");
   }
 
