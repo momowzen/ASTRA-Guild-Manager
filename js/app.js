@@ -65,6 +65,9 @@ async function renderPage(page) {
     case "history":
       renderHistoryPage();
       break;
+    case "analytics":
+      renderAnalyticsPage();
+      break;
   }
 }
 

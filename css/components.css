@@ -601,7 +601,52 @@ select.input option {
 .error-state {
   color: var(--danger);
   text-align: center;
-  padding: 16px;
+  padding: 20px;
+}
+
+.cp-analytics-table {
+  table-layout: auto;
+}
+
+.cp-analytics-table th:nth-child(1),
+.cp-analytics-table td:nth-child(1) {
+  width: 40px;
+  text-align: center;
+}
+
+.cp-analytics-table th:nth-child(4),
+.cp-analytics-table td:nth-child(4) {
+  width: 100px;
+  text-align: right;
+  font-weight: 700;
+  font-family: var(--font-heading);
+  color: var(--primary);
+}
+
+.cp-bar-cell {
+  padding: 4px 8px !important;
+}
+
+.cp-bar-track {
+  height: 16px;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.cp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--secondary), var(--primary));
+  border-radius: 8px;
+  transition: width 0.4s ease;
+  box-shadow: 0 0 10px var(--primary-glow);
+}
+
+.cp-value {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--primary);
 }
 
 .chip {
