@@ -21,13 +21,13 @@ async function renderAnalyticsPage() {
       const db = b.timestamp ? (b.timestamp.toDate ? b.timestamp.toDate() : new Date(b.timestamp)) : new Date(0);
       return da - db;
     });
-    const startCp = history[0].oldValue || 0;
+    const prevCp = history[history.length - 1].oldValue || 0;
     const currentCp = member.combatPower || 0;
-    const change = currentCp - startCp;
-    const pctChange = startCp > 0 ? Math.round(change / startCp * 100) : (change > 0 ? 100 : 0);
+    const change = currentCp - prevCp;
+    const pctChange = prevCp > 0 ? Math.round(change / prevCp * 100) : (change > 0 ? 100 : 0);
     const lastEntry = history[history.length - 1];
     const lastDate = lastEntry && lastEntry.timestamp ? formatDateTime(lastEntry.timestamp) : "-";
-    rows.push({ id: mid, name: member.name, startCp, currentCp, change, pctChange, changes: history.length, lastDate });
+    rows.push({ id: mid, name: member.name, prevCp, currentCp, change, pctChange, changes: history.length, lastDate });
   });
 
   rows.sort((a, b) => b.pctChange - a.pctChange);
@@ -41,12 +41,12 @@ async function renderAnalyticsPage() {
     tableRows = rows.map(r => {
       const barPct = Math.round(Math.abs(r.pctChange) / maxPct * 100);
       const sign = r.change >= 0 ? "+" : "";
-      const pctLabel = r.startCp === 0 && r.currentCp > 0 ? "New" : sign + r.pctChange + "%";
+      const pctLabel = r.prevCp === 0 && r.currentCp > 0 ? "New" : sign + r.pctChange + "%";
       const cls = r.change >= 0 ? "cp-gained" : "cp-lost";
       return `
         <tr onclick="showMemberProfile('${r.id}')" style="cursor:pointer;">
           <td>${escapeHtml(r.name)}</td>
-          <td class="cp-cell">${r.startCp.toLocaleString()}</td>
+          <td class="cp-cell">${r.prevCp.toLocaleString()}</td>
           <td class="cp-cell">${r.currentCp.toLocaleString()}</td>
           <td class="cp-cell ${cls}">${pctLabel}</td>
           <td class="gain-bar-cell"><div class="gain-bar-track"><div class="gain-bar-fill ${cls}" style="width:${barPct}%"></div></div></td>
@@ -65,7 +65,7 @@ async function renderAnalyticsPage() {
         <thead>
           <tr>
             <th>${t("member")}</th>
-            <th>Start CP</th>
+            <th>Previous CP</th>
             <th>Current CP</th>
             <th>% Change</th>
             <th>Progress</th>
