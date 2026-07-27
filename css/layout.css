@@ -396,9 +396,8 @@
   scrollbar-gutter: stable;
 }
 
-#membersPage.page-active .table th:nth-child(5),
-#membersPage.page-active .table td:nth-child(5) {
-  width: 160px;
+#membersPage.page-active .table {
+  table-layout: fixed;
 }
 
 #membersPage.page-active .table th:nth-child(2),
