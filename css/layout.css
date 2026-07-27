@@ -188,8 +188,11 @@
 }
 
 #dashboardPage.page-active .dashboard-grid {
-  margin-bottom: 0;
+  margin-bottom: 10px;
   gap: 10px;
+}
+
+#dashboardPage.page-active > .dashboard-panel:last-child {
   flex: 1;
   min-height: 0;
 }
