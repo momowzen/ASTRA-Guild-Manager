@@ -99,18 +99,19 @@ async function renderDashboard() {
         </table>`}
       </div>
 
-      <div class="dashboard-panel">
-        <h3 data-i18n="recentActivity">${t("recentActivity")}</h3>
-        ${recentActivity.length === 0 ? `<p class="empty-state">${t("noActivity")}</p>` : `
-        <div class="activity-list">
-          ${recentActivity.map(a => `
-            <div class="activity-item">
-              <span class="activity-text">${escapeHtml(a.text)}</span>
-              <span class="activity-date">${a.date ? formatDateTime(a.date) : ""}</span>
-            </div>
-          `).join("")}
-        </div>`}
-      </div>
+    </div>
+
+    <div class="dashboard-panel">
+      <h3 data-i18n="recentActivity">${t("recentActivity")}</h3>
+      ${recentActivity.length === 0 ? `<p class="empty-state">${t("noActivity")}</p>` : `
+      <div class="activity-list">
+        ${recentActivity.map(a => `
+          <div class="activity-item">
+            <span class="activity-text">${escapeHtml(a.text)}</span>
+            <span class="activity-date">${a.date ? formatDateTime(a.date) : ""}</span>
+          </div>
+        `).join("")}
+      </div>`}
     </div>
   `;
 }
