@@ -1,35 +1,56 @@
-function renderAnalyticsPage() {
+async function renderAnalyticsPage() {
   const container = $("analyticsPage");
   if (!container) return;
 
-  const memberCp = membersCache
-    .filter(m => (m.combatPower || 0) > 0)
-    .sort((a, b) => (b.combatPower || 0) - (a.combatPower || 0));
+  container.innerHTML = `<div class="loading-indicator">${t("loading")}</div>`;
 
-  const total = membersCache.length;
-  const totalCp = membersCache.reduce((s, m) => s + (m.combatPower || 0), 0);
-  const average = total ? Math.round(totalCp / total) : 0;
-  const max = memberCp.length ? memberCp[0].combatPower : 0;
-  const median = (() => {
-    const vals = membersCache.map(m => m.combatPower || 0).sort((a, b) => a - b);
-    const mid = Math.floor(vals.length / 2);
-    return vals.length % 2 ? vals[mid] : Math.round((vals[mid - 1] + vals[mid]) / 2);
-  })();
-  const nonzero = memberCp.length;
-  const maxBar = max || 1;
+  const allHistory = await getCollection("memberCpHistory");
+  const memberMap = {};
+  allHistory.forEach(h => {
+    const mid = h.memberId;
+    if (!memberMap[mid]) memberMap[mid] = [];
+    memberMap[mid].push(h);
+  });
 
-  let rows = "";
-  if (memberCp.length === 0) {
-    rows = `<tr><td colspan="3" class="empty-state">${t("noResults")}</td></tr>`;
+  const rows = [];
+  Object.keys(memberMap).forEach(mid => {
+    const member = getMemberById(mid);
+    if (!member) return;
+    const history = memberMap[mid].sort((a, b) => {
+      const da = a.timestamp ? (a.timestamp.toDate ? a.timestamp.toDate() : new Date(a.timestamp)) : new Date(0);
+      const db = b.timestamp ? (b.timestamp.toDate ? b.timestamp.toDate() : new Date(b.timestamp)) : new Date(0);
+      return da - db;
+    });
+    const startCp = history[0].oldValue || 0;
+    const currentCp = member.combatPower || 0;
+    let totalGained = 0;
+    history.forEach(h => {
+      const gain = (h.newValue || 0) - (h.oldValue || 0);
+      if (gain > 0) totalGained += gain;
+    });
+    const lastEntry = history[history.length - 1];
+    const lastDate = lastEntry && lastEntry.timestamp ? formatDateTime(lastEntry.timestamp) : "-";
+    rows.push({ id: mid, name: member.name, startCp, currentCp, totalGained, changes: history.length, lastDate });
+  });
+
+  rows.sort((a, b) => b.totalGained - a.totalGained);
+
+  const maxGain = rows.length ? Math.max(...rows.map(r => r.totalGained)) : 1;
+
+  let tableRows = "";
+  if (rows.length === 0) {
+    tableRows = `<tr><td colspan="6" class="empty-state">${t("noResults")}</td></tr>`;
   } else {
-    rows = memberCp.map((m, i) => {
-      const pct = Math.round((m.combatPower || 0) / maxBar * 100);
+    tableRows = rows.map(r => {
+      const pct = Math.round(r.totalGained / maxGain * 100);
       return `
-        <tr>
-          <td class="rank-cell ${i < 3 ? "rank-" + (i + 1) : ""}">${i + 1}</td>
-          <td>${escapeHtml(m.name)}</td>
-          <td class="cp-bar-cell"><div class="cp-bar-track"><div class="cp-bar-fill" style="width:${pct}%"></div></div></td>
-          <td class="cp-value">${(m.combatPower || 0).toLocaleString()}</td>
+        <tr onclick="showMemberProfile('${r.id}')" style="cursor:pointer;">
+          <td>${escapeHtml(r.name)}</td>
+          <td class="cp-cell">${r.startCp.toLocaleString()}</td>
+          <td class="cp-cell">${r.currentCp.toLocaleString()}</td>
+          <td class="cp-cell cp-gained">+${r.totalGained.toLocaleString()}</td>
+          <td class="gain-bar-cell"><div class="gain-bar-track"><div class="gain-bar-fill" style="width:${pct}%"></div></div></td>
+          <td class="change-count">${r.changes}</td>
         </tr>
       `;
     }).join("");
@@ -37,37 +58,21 @@ function renderAnalyticsPage() {
 
   container.innerHTML = `
     <div class="page-header">
-      <h2>${t("menuAnalytics")}</h2>
-    </div>
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-value">${average.toLocaleString()}</div>
-        <div class="stat-label">Avg CP</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">${max.toLocaleString()}</div>
-        <div class="stat-label">Max CP</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">${median.toLocaleString()}</div>
-        <div class="stat-label">Median CP</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">${nonzero} / ${total}</div>
-        <div class="stat-label">With CP</div>
-      </div>
+      <h2>${t("menuAnalytics")} — ${t("combatPower")}</h2>
     </div>
     <div class="table-container">
       <table class="table cp-analytics-table">
         <thead>
           <tr>
-            <th>${t("rank")}</th>
             <th>${t("member")}</th>
-            <th>${t("combatPower")}</th>
-            <th></th>
+            <th>Start CP</th>
+            <th>Current CP</th>
+            <th>Total Gained</th>
+            <th>Progress</th>
+            <th>Updates</th>
           </tr>
         </thead>
-        <tbody>${rows}</tbody>
+        <tbody>${tableRows}</tbody>
       </table>
     </div>
   `;

@@ -610,43 +610,51 @@ select.input option {
 
 .cp-analytics-table th:nth-child(1),
 .cp-analytics-table td:nth-child(1) {
-  width: 40px;
-  text-align: center;
+  text-align: left;
 }
 
-.cp-analytics-table th:nth-child(4),
+.cp-analytics-table td:nth-child(2),
+.cp-analytics-table td:nth-child(3),
 .cp-analytics-table td:nth-child(4) {
-  width: 100px;
-  text-align: right;
-  font-weight: 700;
   font-family: var(--font-heading);
-  color: var(--primary);
+  font-weight: 700;
+  font-size: 14px;
 }
 
-.cp-bar-cell {
-  padding: 4px 8px !important;
+.cp-analytics-table td:nth-child(4) {
+  color: var(--success);
 }
 
-.cp-bar-track {
-  height: 16px;
+.cp-analytics-table th:nth-child(6),
+.cp-analytics-table td:nth-child(6) {
+  text-align: center;
+  width: 80px;
+}
+
+.change-count {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.gain-bar-cell {
+  padding: 4px 12px !important;
+}
+
+.gain-bar-track {
+  height: 14px;
   background: var(--bg-secondary);
-  border-radius: 8px;
+  border-radius: 7px;
   overflow: hidden;
   border: 1px solid var(--border);
 }
 
-.cp-bar-fill {
+.gain-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--secondary), var(--primary));
-  border-radius: 8px;
+  background: linear-gradient(90deg, var(--success), var(--primary));
+  border-radius: 7px;
   transition: width 0.4s ease;
-  box-shadow: 0 0 10px var(--primary-glow);
-}
-
-.cp-value {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  color: var(--primary);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
 }
 
 .chip {

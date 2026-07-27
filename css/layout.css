@@ -458,6 +458,17 @@
   gap: 16px;
 }
 
+#analyticsPage.page-active .page-header {
+  margin-bottom: 0;
+  flex-shrink: 0;
+}
+
+#analyticsPage.page-active .table-container {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
 #historyPage.page-active .history-list {
   flex: 1;
   min-height: 0;
