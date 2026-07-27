@@ -711,7 +711,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
-  flex: 2;
+  flex: 1;
   min-height: 0;
   overflow: hidden;
 }
