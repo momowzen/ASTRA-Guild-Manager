@@ -625,6 +625,15 @@ select.input option {
   color: var(--success);
 }
 
+.cp-lost {
+  color: var(--danger) !important;
+}
+
+.cp-lost.gain-bar-fill {
+  background: linear-gradient(90deg, var(--danger), var(--warning)) !important;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.4) !important;
+}
+
 .cp-analytics-table th:nth-child(6),
 .cp-analytics-table td:nth-child(6) {
   text-align: center;

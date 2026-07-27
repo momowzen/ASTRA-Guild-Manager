@@ -23,33 +23,33 @@ async function renderAnalyticsPage() {
     });
     const startCp = history[0].oldValue || 0;
     const currentCp = member.combatPower || 0;
-    let totalGained = 0;
-    history.forEach(h => {
-      const gain = (h.newValue || 0) - (h.oldValue || 0);
-      if (gain > 0) totalGained += gain;
-    });
+    const change = currentCp - startCp;
+    const pctChange = startCp > 0 ? Math.round(change / startCp * 100) : (change > 0 ? 100 : 0);
     const lastEntry = history[history.length - 1];
     const lastDate = lastEntry && lastEntry.timestamp ? formatDateTime(lastEntry.timestamp) : "-";
-    rows.push({ id: mid, name: member.name, startCp, currentCp, totalGained, changes: history.length, lastDate });
+    rows.push({ id: mid, name: member.name, startCp, currentCp, change, pctChange, changes: history.length, lastDate });
   });
 
-  rows.sort((a, b) => b.totalGained - a.totalGained);
+  rows.sort((a, b) => b.pctChange - a.pctChange);
 
-  const maxGain = rows.length ? Math.max(...rows.map(r => r.totalGained)) : 1;
+  const maxPct = rows.length ? Math.max(...rows.map(r => Math.abs(r.pctChange))) : 1;
 
   let tableRows = "";
   if (rows.length === 0) {
     tableRows = `<tr><td colspan="6" class="empty-state">${t("noResults")}</td></tr>`;
   } else {
     tableRows = rows.map(r => {
-      const pct = Math.round(r.totalGained / maxGain * 100);
+      const barPct = Math.round(Math.abs(r.pctChange) / maxPct * 100);
+      const sign = r.change >= 0 ? "+" : "";
+      const pctLabel = r.startCp === 0 && r.currentCp > 0 ? "New" : sign + r.pctChange + "%";
+      const cls = r.change >= 0 ? "cp-gained" : "cp-lost";
       return `
         <tr onclick="showMemberProfile('${r.id}')" style="cursor:pointer;">
           <td>${escapeHtml(r.name)}</td>
           <td class="cp-cell">${r.startCp.toLocaleString()}</td>
           <td class="cp-cell">${r.currentCp.toLocaleString()}</td>
-          <td class="cp-cell cp-gained">+${r.totalGained.toLocaleString()}</td>
-          <td class="gain-bar-cell"><div class="gain-bar-track"><div class="gain-bar-fill" style="width:${pct}%"></div></div></td>
+          <td class="cp-cell ${cls}">${pctLabel}</td>
+          <td class="gain-bar-cell"><div class="gain-bar-track"><div class="gain-bar-fill ${cls}" style="width:${barPct}%"></div></div></td>
           <td class="change-count">${r.changes}</td>
         </tr>
       `;
@@ -67,7 +67,7 @@ async function renderAnalyticsPage() {
             <th>${t("member")}</th>
             <th>Start CP</th>
             <th>Current CP</th>
-            <th>Total Gained</th>
+            <th>% Change</th>
             <th>Progress</th>
             <th>Updates</th>
           </tr>
