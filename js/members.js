@@ -91,14 +91,14 @@ function renderMemberRows(members) {
     return `<tr><td colspan="5" class="empty-state">${t("noResults")}</td></tr>`;
   }
   return members.map(m => `
-    <tr>
-      <td><a href="#" onclick="showMemberProfile('${m.id}');return false" style="text-decoration:none;color:inherit;">${escapeHtml(m.name)}</a></td>
+    <tr onclick="showMemberProfile('${m.id}')" style="cursor:pointer;">
+      <td>${escapeHtml(m.name)}</td>
       <td>${(m.combatPower || 0).toLocaleString()}</td>
       <td>${escapeHtml(m.mainWeapon || "-")}</td>
       <td>${escapeHtml(m.secondaryWeapon || "-")}</td>
       <td class="actions-cell">
-        <button class="btn btn-sm btn-secondary" onclick="showEditMemberDialog('${m.id}')" data-i18n="edit">${t("edit")}</button>
-        <button class="btn btn-sm btn-danger" onclick="confirmDeleteMember('${m.id}')" data-i18n="delete">${t("delete")}</button>
+        <button class="btn btn-sm btn-secondary" onclick="event.stopPropagation();showEditMemberDialog('${m.id}')" data-i18n="edit">${t("edit")}</button>
+        <button class="btn btn-sm btn-danger" onclick="event.stopPropagation();confirmDeleteMember('${m.id}')" data-i18n="delete">${t("delete")}</button>
       </td>
     </tr>
   `).join("");
