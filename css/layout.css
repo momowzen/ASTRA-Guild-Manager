@@ -272,12 +272,18 @@
 }
 
 #dashboardPage.page-active .weapon-grid {
-  gap: 4px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 2px;
+  justify-content: space-evenly;
 }
 
 #dashboardPage.page-active .weapon-bar-row {
   grid-template-columns: 100px 24px 1fr;
   gap: 6px;
+  flex-shrink: 0;
 }
 
 #dashboardPage.page-active .weapon-bar-label {
