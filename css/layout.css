@@ -326,8 +326,8 @@
   scrollbar-gutter: stable;
 }
 
-#membersPage.page-active .table th:nth-child(2),
-#membersPage.page-active .table td:nth-child(2) {
+#membersPage.page-active .table th:nth-child(3),
+#membersPage.page-active .table td:nth-child(3) {
   width: 160px;
 }
 

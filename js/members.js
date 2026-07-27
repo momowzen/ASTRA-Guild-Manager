@@ -1,4 +1,5 @@
 let membersCache = [];
+let membersSort = { field: "name", asc: true };
 
 async function loadMembers() {
   membersCache = await getCollection("members");
@@ -22,6 +23,7 @@ async function addMember(name) {
   const now = nowJST();
   const data = {
     name: name.trim(),
+    combatPower: 0,
     points: 0,
     attendanceCount: 0,
     lastAttendance: null,
@@ -70,11 +72,12 @@ function getFilteredMembers() {
 
 function renderMemberRows(members) {
   if (members.length === 0) {
-    return `<tr><td colspan="2" class="empty-state">${t("noResults")}</td></tr>`;
+    return `<tr><td colspan="3" class="empty-state">${t("noResults")}</td></tr>`;
   }
   return members.map(m => `
     <tr>
       <td>${escapeHtml(m.name)}</td>
+      <td>${m.combatPower || 0}</td>
       <td class="actions-cell">
         <button class="btn btn-sm btn-secondary" onclick="showEditMemberDialog('${m.id}')" data-i18n="edit">${t("edit")}</button>
         <button class="btn btn-sm btn-danger" onclick="confirmDeleteMember('${m.id}')" data-i18n="delete">${t("delete")}</button>
@@ -91,11 +94,23 @@ function clearMembersSearch() {
   }
 }
 
+function sortMembers(members) {
+  return [...members].sort((a, b) => {
+    let cmp;
+    if (membersSort.field === "combatPower") {
+      cmp = (a.combatPower || 0) - (b.combatPower || 0);
+    } else {
+      cmp = a.name.localeCompare(b.name);
+    }
+    return membersSort.asc ? cmp : -cmp;
+  });
+}
+
 function filterMembers() {
   const tbody = $("membersTbody");
   if (!tbody) return;
   const filtered = getFilteredMembers();
-  tbody.innerHTML = renderMemberRows([...filtered].sort((a, b) => (b.points || 0) - (a.points || 0)));
+  tbody.innerHTML = renderMemberRows(sortMembers(filtered));
 }
 
 function renderMembersPage() {
@@ -103,7 +118,9 @@ function renderMembersPage() {
   if (!container) return;
 
   const filtered = getFilteredMembers();
-  const sorted = [...filtered].sort((a, b) => (b.points || 0) - (a.points || 0));
+
+  const nameArrow = membersSort.field === "name" ? (membersSort.asc ? " ▲" : " ▼") : "";
+  const cpArrow = membersSort.field === "combatPower" ? (membersSort.asc ? " ▲" : " ▼") : "";
 
   let html = `
     <div class="members-toolbar">
@@ -117,12 +134,13 @@ function renderMembersPage() {
       <table class="table">
         <thead>
           <tr>
-            <th data-i18n="name">${t("name")}</th>
+            <th class="sortable-th" onclick="toggleSort('name')">${t("name")}${nameArrow}</th>
+            <th class="sortable-th" onclick="toggleSort('combatPower')">${t("combatPower")}${cpArrow}</th>
             <th data-i18n="actions">${t("actions")}</th>
           </tr>
         </thead>
         <tbody id="membersTbody">
-          ${renderMemberRows(sorted)}
+          ${renderMemberRows(sortMembers(filtered))}
         </tbody>
       </table>
     </div>
@@ -197,7 +215,10 @@ function showEditMemberDialog(id) {
 
   dialog.innerHTML = `
     <h3 style="margin-bottom:12px;font-size:18px;">${t("editMember")}</h3>
+    <label style="display:block;font-size:13px;color:var(--text-secondary);margin-bottom:4px;">${t("name")}</label>
     <input type="text" id="editMemberInput" class="input" value="${escapeHtml(member.name)}" style="margin-bottom:12px;">
+    <label style="display:block;font-size:13px;color:var(--text-secondary);margin-bottom:4px;">${t("combatPower")}</label>
+    <input type="number" id="editCpInput" class="input" value="${member.combatPower || 0}" min="0" style="margin-bottom:12px;">
     <div style="display:flex;gap:12px;justify-content:flex-end;">
       <button class="btn btn-secondary" id="cancelEditBtn">${t("cancel")}</button>
       <button class="btn btn-primary" id="confirmEditBtn">${t("save")}</button>
@@ -208,9 +229,10 @@ function showEditMemberDialog(id) {
   document.body.appendChild(overlay);
   requestAnimationFrame(() => overlay.classList.add("confirm-visible"));
 
-  const input = dialog.querySelector("#editMemberInput");
-  input.focus();
-  input.select();
+  const nameInput = dialog.querySelector("#editMemberInput");
+  const cpInput = dialog.querySelector("#editCpInput");
+  nameInput.focus();
+  nameInput.select();
 
   const cleanup = () => {
     overlay.classList.remove("confirm-visible");
@@ -221,19 +243,32 @@ function showEditMemberDialog(id) {
   overlay.onclick = e => { if (e.target === overlay) cleanup(); };
 
   dialog.querySelector("#confirmEditBtn").onclick = async () => {
-    const name = input.value.trim();
+    const name = nameInput.value.trim();
+    const combatPower = parseInt(cpInput.value, 10) || 0;
+    const updateData = { combatPower };
     if (name && name !== member.name) {
-      await updateMember(id, { name });
-      renderMembersPage();
-      showToast(t("memberUpdated"), "success");
+      updateData.name = name;
     }
+    await updateMember(id, updateData);
+    renderMembersPage();
+    showToast(t("memberUpdated"), "success");
     cleanup();
   };
 
-  input.onkeydown = e => {
+  nameInput.onkeydown = e => {
     if (e.key === "Enter") dialog.querySelector("#confirmEditBtn").click();
     if (e.key === "Escape") cleanup();
   };
+}
+
+function toggleSort(field) {
+  if (membersSort.field === field) {
+    membersSort.asc = !membersSort.asc;
+  } else {
+    membersSort.field = field;
+    membersSort.asc = true;
+  }
+  renderMembersPage();
 }
 
 async function confirmDeleteMember(id) {

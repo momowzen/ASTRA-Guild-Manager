@@ -96,7 +96,8 @@ const LANG = {
     historyCleared: "All history has been cleared",
     boss: "Boss",
     uploadError: "Please upload a PNG or JPG image",
-    clickToView: "CLICK TO VIEW"
+    clickToView: "CLICK TO VIEW",
+    combatPower: "Combat Power"
   },
 
   ko: {
@@ -196,7 +197,8 @@ const LANG = {
     historyCleared: "모든 기록이 삭제되었습니다",
     boss: "보스",
     uploadError: "PNG 또는 JPG 이미지를 업로드해주세요",
-    clickToView: "클릭하여 보기"
+    clickToView: "클릭하여 보기",
+    combatPower: "전투력"
   },
 
   ja: {
@@ -296,7 +298,8 @@ const LANG = {
     historyCleared: "全ての履歴がクリアされました",
     boss: "ボス",
     uploadError: "PNGまたはJPG画像をアップロードしてください",
-    clickToView: "クリックして表示"
+    clickToView: "クリックして表示",
+    combatPower: "戦闘力"
   }
 };
 

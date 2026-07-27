@@ -153,6 +153,15 @@
   z-index: 1;
 }
 
+.sortable-th {
+  cursor: pointer;
+  user-select: none;
+}
+
+.sortable-th:hover {
+  color: #fff;
+}
+
 
 .table td {
   padding: 12px 16px;
