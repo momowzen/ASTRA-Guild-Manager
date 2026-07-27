@@ -878,6 +878,8 @@
   font-weight: 700;
   color: #fff;
   flex-shrink: 0;
+  border: 2px solid var(--border-glow);
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.3);
 }
 
 .profile-header h3 {

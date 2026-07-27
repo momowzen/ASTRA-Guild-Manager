@@ -324,12 +324,30 @@ async function showMemberProfile(id) {
           </table>
         </div>
       </div>
-      <div class="view-dialog-actions">
+      <div class="view-dialog-actions" style="display:flex;gap:12px;justify-content:space-between;">
+        <button class="btn btn-sm btn-danger" id="clearCpBtn">${t("clearHistory")}</button>
         <button class="btn btn-primary" onclick="this.closest('.view-dialog-overlay').remove()">${t("close")}</button>
       </div>
     </div>
   `;
   document.body.appendChild(overlay);
+
+  const clearBtn = overlay.querySelector("#clearCpBtn");
+  if (history.length === 0) {
+    clearBtn.style.display = "none";
+  } else {
+    clearBtn.onclick = async () => {
+      const confirmed = await showConfirm(t("confirmClearCpHistory"));
+      if (!confirmed) return;
+      const records = await queryCollection("memberCpHistory", "memberId", "==", id);
+      const batch = db.batch();
+      records.forEach(r => batch.delete(db.collection("memberCpHistory").doc(r.id)));
+      await batch.commit();
+      overlay.remove();
+      showToast(t("historyCleared"), "success");
+    };
+  }
+
   overlay.onclick = e => { if (e.target === overlay) overlay.remove(); };
 }
 

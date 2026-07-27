@@ -101,7 +101,8 @@ const LANG = {
     combatPower: "Combat Power",
     cpHistory: "Combat Power History",
     noChange: "No change",
-    date: "Date"
+    date: "Date",
+    confirmClearCpHistory: "Delete all combat power history for this member?"
   },
 
   ko: {
