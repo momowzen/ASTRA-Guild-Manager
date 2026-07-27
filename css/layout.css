@@ -331,6 +331,11 @@
   width: 160px;
 }
 
+#membersPage.page-active .table th:nth-child(2),
+#membersPage.page-active .table td:nth-child(2) {
+  text-align: center;
+}
+
 #bossConfigPage.page-active {
   display: flex;
   flex-direction: column;
