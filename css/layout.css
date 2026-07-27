@@ -199,12 +199,19 @@
   display: flex;
   flex-direction: column;
   min-height: 0;
+  overflow-y: auto;
 }
 
 #dashboardPage.page-active .dashboard-panel h3 {
   font-size: 13px;
   margin-bottom: 8px;
   flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--bg-card);
+  padding: 6px 0;
+  margin: -6px 0 6px;
 }
 
 #dashboardPage.page-active .dashboard-table {
@@ -214,6 +221,24 @@
 #dashboardPage.page-active .dashboard-table th,
 #dashboardPage.page-active .dashboard-table td {
   padding: 4px 8px;
+}
+
+#dashboardPage.page-active .dashboard-table th:first-child,
+#dashboardPage.page-active .dashboard-table td:first-child {
+  width: 32px;
+  padding-right: 2px;
+  text-align: center;
+}
+
+#dashboardPage.page-active .dashboard-table th:nth-child(2),
+#dashboardPage.page-active .dashboard-table td:nth-child(2) {
+  padding-left: 2px;
+}
+
+#dashboardPage.page-active .dashboard-table th:last-child,
+#dashboardPage.page-active .dashboard-table td:last-child {
+  text-align: right;
+  width: 70px;
 }
 
 #dashboardPage.page-active .activity-list {

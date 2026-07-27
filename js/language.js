@@ -13,7 +13,7 @@ const LANG = {
     totalPoints: "Guild Points Awarded",
     recentAttendance: "Recent Attendance",
     recentActivity: "Recent Activity",
-    topRankings: "Top 10 Rankings",
+    topRankings: "Top 10 Points",
     topCombatPower: "Top 10 Combat Power",
     attendance: "Attendance",
     addMember: "Add Member",
