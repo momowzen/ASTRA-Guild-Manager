@@ -361,6 +361,19 @@
   text-align: center;
 }
 
+#membersPage.page-active .table th:nth-child(3) {
+  color: transparent;
+}
+
+#membersPage.page-active .actions-cell .btn {
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+#membersPage.page-active tbody tr:hover .actions-cell .btn {
+  opacity: 1;
+}
+
 #bossConfigPage.page-active {
   display: flex;
   flex-direction: column;
