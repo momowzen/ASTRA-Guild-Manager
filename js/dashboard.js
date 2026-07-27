@@ -104,6 +104,23 @@ async function renderDashboard() {
     </div>
 
     <div class="dashboard-panel">
+      <h3 data-i18n="weaponMastery">${t("weaponMastery")}</h3>
+      <div class="weapon-grid">
+        ${WEAPON_MASTERIES.map(w => {
+          const count = membersCache.filter(m => m.mainWeapon === w || m.secondaryWeapon === w).length;
+          const pct = totalMembers ? Math.round(count / totalMembers * 100) : 0;
+          return `
+            <div class="weapon-bar-row">
+              <span class="weapon-bar-label">${escapeHtml(w)}</span>
+              <span class="weapon-bar-count">${count}</span>
+              <div class="weapon-bar-track"><div class="weapon-bar-fill" style="width:${pct}%"></div></div>
+            </div>
+          `;
+        }).join("")}
+      </div>
+    </div>
+
+    <div class="dashboard-panel">
       <h3 data-i18n="recentActivity">${t("recentActivity")}</h3>
       ${recentActivity.length === 0 ? `<p class="empty-state">${t("noActivity")}</p>` : `
       <div class="activity-list">
