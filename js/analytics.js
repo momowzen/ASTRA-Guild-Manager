@@ -48,7 +48,7 @@ async function renderAnalyticsPage() {
     tableRows = rows.map(r => {
       const barPct = Math.round(Math.abs(r.pctChange) / maxPct * 100);
       const sign = r.change >= 0 ? "+" : "";
-      const pctLabel = r.prevCp === 0 && r.currentCp > 0 ? "New" : sign + r.pctChange + "%";
+      const pctLabel = r.prevCp === 0 && r.currentCp > 0 ? t("analyticsNew") : sign + r.pctChange + "%";
       const cls = r.change >= 0 ? "cp-gained" : "cp-lost";
       return `
         <tr onclick="showMemberProfile('${r.id}')" style="cursor:pointer;">
@@ -69,11 +69,11 @@ async function renderAnalyticsPage() {
         <thead>
           <tr>
             <th class="sortable-th" onclick="toggleAnalyticsSort('name')">${t("member")}${arrow("name")}</th>
-            <th class="sortable-th" onclick="toggleAnalyticsSort('prevCp')">Previous CP${arrow("prevCp")}</th>
-            <th class="sortable-th" onclick="toggleAnalyticsSort('currentCp')">Current CP${arrow("currentCp")}</th>
-            <th class="sortable-th" onclick="toggleAnalyticsSort('pctChange')">% Change${arrow("pctChange")}</th>
-            <th>Progress</th>
-            <th class="sortable-th" onclick="toggleAnalyticsSort('changes')">Updates${arrow("changes")}</th>
+            <th class="sortable-th" onclick="toggleAnalyticsSort('prevCp')">${t("analyticsPrevCp")}${arrow("prevCp")}</th>
+            <th class="sortable-th" onclick="toggleAnalyticsSort('currentCp')">${t("analyticsCurrentCp")}${arrow("currentCp")}</th>
+            <th class="sortable-th" onclick="toggleAnalyticsSort('pctChange')">${t("analyticsPctChange")}${arrow("pctChange")}</th>
+            <th>${t("analyticsProgress")}</th>
+            <th class="sortable-th" onclick="toggleAnalyticsSort('changes')">${t("analyticsUpdates")}${arrow("changes")}</th>
           </tr>
         </thead>
         <tbody>${tableRows}</tbody>
