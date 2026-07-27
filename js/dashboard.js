@@ -11,6 +11,9 @@ async function renderDashboard() {
   const sortedMembers = [...membersCache].sort((a, b) => (b.points || 0) - (a.points || 0));
   const top10 = sortedMembers.slice(0, 10);
 
+  const sortedByCp = [...membersCache].sort((a, b) => (b.combatPower || 0) - (a.combatPower || 0));
+  const top10Cp = sortedByCp.slice(0, 10);
+
   const recentRecords = [...attendanceRecords]
     .sort((a, b) => {
       const da = a.createdAt ? (a.createdAt.toDate ? a.createdAt.toDate() : new Date(a.createdAt)) : new Date(0);
@@ -67,6 +70,29 @@ async function renderDashboard() {
                 <td class="rank-cell ${i < 3 ? `rank-${i + 1}` : ""}">${i + 1}</td>
                 <td>${escapeHtml(m.name)}</td>
                 <td>${m.points || 0}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>`}
+      </div>
+
+      <div class="dashboard-panel">
+        <h3 data-i18n="topCombatPower">${t("topCombatPower")}</h3>
+        ${top10Cp.length === 0 ? `<p class="empty-state">${t("noResults")}</p>` : `
+        <table class="table dashboard-table">
+          <thead>
+            <tr>
+              <th data-i18n="rank">${t("rank")}</th>
+              <th data-i18n="member">${t("member")}</th>
+              <th>${t("combatPower")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${top10Cp.map((m, i) => `
+              <tr>
+                <td class="rank-cell ${i < 3 ? `rank-${i + 1}` : ""}">${i + 1}</td>
+                <td>${escapeHtml(m.name)}</td>
+                <td>${(m.combatPower || 0).toLocaleString()}</td>
               </tr>
             `).join("")}
           </tbody>
