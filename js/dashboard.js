@@ -25,7 +25,9 @@ async function renderDashboard() {
   const recentActivity = recentRecords.map(r => {
     const boss = BOSSES.find(b => b.id === r.bossId);
     const bossName = boss ? getBossName(boss) : r.bossId;
-    return { text: `${bossName} (${(r.members || []).length} ${t("member")})`, date: r.createdAt };
+    const count = (r.members || []).length;
+    const label = count === 1 ? "Member" : "Members";
+    return { text: `Killed ${bossName} with ${count} ${label}`, date: r.createdAt };
   });
 
   container.innerHTML = `
