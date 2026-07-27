@@ -725,6 +725,18 @@
   overflow-y: auto;
 }
 
+.attendance-left .card-ocr-results h3,
+.attendance-left .card-close-matches h3,
+.attendance-left .card-matched-members h3,
+.attendance-right .card:last-child h3 {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--bg-card);
+  padding: 8px 0 6px;
+  margin: -2px 0 6px;
+}
+
 .attendance-right .card:last-child {
   flex: 1;
   display: flex;
