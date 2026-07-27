@@ -1,3 +1,5 @@
+let analyticsSort = { field: "pctChange", asc: false };
+
 async function renderAnalyticsPage() {
   const container = $("analyticsPage");
   if (!container) return;
@@ -30,9 +32,14 @@ async function renderAnalyticsPage() {
     rows.push({ id: mid, name: member.name, prevCp, currentCp, change, pctChange, changes: history.length, lastDate });
   });
 
-  rows.sort((a, b) => b.pctChange - a.pctChange);
+  sortAnalyticsRows(rows);
 
   const maxPct = rows.length ? Math.max(...rows.map(r => Math.abs(r.pctChange))) : 1;
+
+  function arrow(field) {
+    if (analyticsSort.field !== field) return "";
+    return analyticsSort.asc ? " ▲" : " ▼";
+  }
 
   let tableRows = "";
   if (rows.length === 0) {
@@ -57,23 +64,42 @@ async function renderAnalyticsPage() {
   }
 
   container.innerHTML = `
-    <div class="page-header">
-      <h2>${t("menuAnalytics")} — ${t("combatPower")}</h2>
-    </div>
     <div class="table-container">
       <table class="table cp-analytics-table">
         <thead>
           <tr>
-            <th>${t("member")}</th>
-            <th>Previous CP</th>
-            <th>Current CP</th>
-            <th>% Change</th>
+            <th class="sortable-th" onclick="toggleAnalyticsSort('name')">${t("member")}${arrow("name")}</th>
+            <th class="sortable-th" onclick="toggleAnalyticsSort('prevCp')">Previous CP${arrow("prevCp")}</th>
+            <th class="sortable-th" onclick="toggleAnalyticsSort('currentCp')">Current CP${arrow("currentCp")}</th>
+            <th class="sortable-th" onclick="toggleAnalyticsSort('pctChange')">% Change${arrow("pctChange")}</th>
             <th>Progress</th>
-            <th>Updates</th>
+            <th class="sortable-th" onclick="toggleAnalyticsSort('changes')">Updates${arrow("changes")}</th>
           </tr>
         </thead>
         <tbody>${tableRows}</tbody>
       </table>
     </div>
   `;
+}
+
+function sortAnalyticsRows(rows) {
+  rows.sort((a, b) => {
+    let cmp;
+    if (analyticsSort.field === "name") {
+      cmp = a.name.localeCompare(b.name);
+    } else if (analyticsSort.field === "prevCp" || analyticsSort.field === "currentCp" || analyticsSort.field === "pctChange" || analyticsSort.field === "changes") {
+      cmp = (a[analyticsSort.field] || 0) - (b[analyticsSort.field] || 0);
+    }
+    return analyticsSort.asc ? cmp : -cmp;
+  });
+}
+
+function toggleAnalyticsSort(field) {
+  if (analyticsSort.field === field) {
+    analyticsSort.asc = !analyticsSort.asc;
+  } else {
+    analyticsSort.field = field;
+    analyticsSort.asc = true;
+  }
+  renderAnalyticsPage();
 }
