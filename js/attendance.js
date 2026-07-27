@@ -241,12 +241,15 @@ async function runOcrOnAllFiles() {
 
 async function processOCR(imageFile, fileIndex, totalFiles, allLines) {
   const progressText = $("progressText");
+  const progressFill = $("progressFill");
 
   try {
     const label = totalFiles > 1 ? `[${fileIndex}/${totalFiles}] ` : "";
+    if (progressFill) progressFill.style.width = "0%";
     if (progressText) progressText.textContent = label + t("ocrProcessing");
 
     const lines = await performOCR(imageFile, progress => {
+      if (progressFill) progressFill.style.width = `${progress}%`;
       if (progressText) progressText.textContent = `${label}${t("ocrProcessing")} ${progress}%`;
     });
 
