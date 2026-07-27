@@ -1,11 +1,29 @@
 let analyticsSort = { field: "pctChange", asc: false };
+let analyticsRows = null;
 
 async function renderAnalyticsPage() {
   const container = $("analyticsPage");
   if (!container) return;
 
-  container.innerHTML = `<div class="loading-indicator">${t("loading")}</div>`;
+  if (!analyticsRows) {
+    container.innerHTML = `<div class="loading-indicator">${t("loading")}</div>`;
+    analyticsRows = await loadAnalyticsData();
+  }
+  renderAnalyticsTable(container);
+}
 
+function toggleAnalyticsSort(field) {
+  if (analyticsSort.field === field) {
+    analyticsSort.asc = !analyticsSort.asc;
+  } else {
+    analyticsSort.field = field;
+    analyticsSort.asc = true;
+  }
+  const container = $("analyticsPage");
+  if (container) renderAnalyticsTable(container);
+}
+
+async function loadAnalyticsData() {
   const allHistory = await getCollection("memberCpHistory");
   const memberMap = {};
   allHistory.forEach(h => {
@@ -31,10 +49,22 @@ async function renderAnalyticsPage() {
     const lastDate = lastEntry && lastEntry.timestamp ? formatDateTime(lastEntry.timestamp) : "-";
     rows.push({ id: mid, name: member.name, prevCp, currentCp, change, pctChange, changes: history.length, lastDate });
   });
+  return rows;
+}
 
-  sortAnalyticsRows(rows);
+function renderAnalyticsTable(container) {
+  const sorted = [...analyticsRows];
+  sorted.sort((a, b) => {
+    let cmp;
+    if (analyticsSort.field === "name") {
+      cmp = a.name.localeCompare(b.name);
+    } else {
+      cmp = (a[analyticsSort.field] || 0) - (b[analyticsSort.field] || 0);
+    }
+    return analyticsSort.asc ? cmp : -cmp;
+  });
 
-  const maxPct = rows.length ? Math.max(...rows.map(r => Math.abs(r.pctChange))) : 1;
+  const maxPct = sorted.length ? Math.max(...sorted.map(r => Math.abs(r.pctChange))) : 1;
 
   function arrow(field) {
     if (analyticsSort.field !== field) return "";
@@ -42,10 +72,10 @@ async function renderAnalyticsPage() {
   }
 
   let tableRows = "";
-  if (rows.length === 0) {
+  if (sorted.length === 0) {
     tableRows = `<tr><td colspan="6" class="empty-state">${t("noResults")}</td></tr>`;
   } else {
-    tableRows = rows.map(r => {
+    tableRows = sorted.map(r => {
       const barPct = Math.round(Math.abs(r.pctChange) / maxPct * 100);
       const sign = r.change >= 0 ? "+" : "";
       const pctLabel = r.prevCp === 0 && r.currentCp > 0 ? t("analyticsNew") : sign + r.pctChange + "%";
@@ -80,26 +110,4 @@ async function renderAnalyticsPage() {
       </table>
     </div>
   `;
-}
-
-function sortAnalyticsRows(rows) {
-  rows.sort((a, b) => {
-    let cmp;
-    if (analyticsSort.field === "name") {
-      cmp = a.name.localeCompare(b.name);
-    } else if (analyticsSort.field === "prevCp" || analyticsSort.field === "currentCp" || analyticsSort.field === "pctChange" || analyticsSort.field === "changes") {
-      cmp = (a[analyticsSort.field] || 0) - (b[analyticsSort.field] || 0);
-    }
-    return analyticsSort.asc ? cmp : -cmp;
-  });
-}
-
-function toggleAnalyticsSort(field) {
-  if (analyticsSort.field === field) {
-    analyticsSort.asc = !analyticsSort.asc;
-  } else {
-    analyticsSort.field = field;
-    analyticsSort.asc = true;
-  }
-  renderAnalyticsPage();
 }

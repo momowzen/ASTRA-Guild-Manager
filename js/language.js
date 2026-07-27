@@ -1,6 +1,6 @@
 const LANG = {
   en: {
-    topbarTitle: "Guild Manager",
+    topbarTitle: "GUILD MANAGER",
     menuDashboard: "Dashboard",
     menuAttendance: "Attendance",
     menuRanking: "Points Ranking",

@@ -1,36 +1,83 @@
+/* ═══════════════════════════════════════════════
+   ASTRA Guild Manager — Design Tokens & Base
+   ═══════════════════════════════════════════════ */
+
 :root {
-  --primary: #f0c040;
-  --primary-hover: #d4a830;
-  --primary-light: rgba(240, 192, 64, 0.12);
-  --primary-glow: rgba(240, 192, 64, 0.3);
-  --danger: #dc3545;
-  --danger-hover: #b02a37;
-  --success: #28a745;
-  --warning: #e67e22;
-  --info: #3498db;
-  --bg: #0d0d1a;
-  --bg-card: #14142b;
-  --bg-sidebar: #08081a;
-  --bg-sidebar-hover: #1a1a3e;
-  --bg-topbar: #101028;
-  --text: #e8e8f0;
-  --text-secondary: #8888a0;
-  --text-sidebar: #666688;
-  --text-sidebar-active: #f0c040;
-  --border: #2a2a50;
-  --border-glow: rgba(240, 192, 64, 0.15);
-  --shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
-  --shadow-glow: 0 0 12px rgba(240, 192, 64, 0.15);
-  --radius: 8px;
-  --radius-sm: 4px;
-  --radius-xs: 2px;
-  --transition: 0.2s ease;
-  --font: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  /* ── Palette ─────────────────────────────── */
+  --accent: #4CB8FF;
+  --accent-hover: #6BC5FF;
+  --accent-subtle: rgba(76, 184, 255, 0.08);
+  --accent-mid: rgba(76, 184, 255, 0.15);
+  --accent-glow: rgba(76, 184, 255, 0.25);
+
+  --success: #4ADE80;
+  --success-subtle: rgba(74, 222, 128, 0.15);
+  --danger: #F87171;
+  --danger-subtle: rgba(248, 113, 113, 0.15);
+  --warning: #FBBF24;
+  --warning-subtle: rgba(251, 191, 36, 0.15);
+  --info: #60A5FA;
+
+  /* ── Surfaces ────────────────────────────── */
+  --bg-app: #0F1217;
+  --bg-sidebar: #0A0D11;
+  --bg-surface: #14181F;
+  --bg-surface-hover: #1A202A;
+  --bg-elevated: #1B212A;
+  --bg-input: #0F1217;
+  --bg-canvas: #0C0F14;
+  --bg-row-hover: rgba(76, 184, 255, 0.04);
+
+  /* ── Text ────────────────────────────────── */
+  --text-primary: #E5E7EB;
+  --text-secondary: #9CA3AF;
+  --text-tertiary: #6B7280;
+  --text-inverse: #0F1217;
+
+  /* ── Borders ─────────────────────────────── */
+  --border-default: rgba(255, 255, 255, 0.06);
+  --border-strong: rgba(255, 255, 255, 0.10);
+  --border-accent: rgba(76, 184, 255, 0.20);
+
+  /* ── Shadows ─────────────────────────────── */
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-card-hover: 0 4px 12px rgba(0,0,0,0.5), 0 0 0 1px var(--border-strong);
+  --shadow-modal: 0 16px 48px rgba(0,0,0,0.6);
+  --shadow-glow: 0 0 16px var(--accent-glow);
+  --shadow-glow-sm: 0 0 8px var(--accent-glow);
+
+  /* ── Radii ───────────────────────────────── */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* ── Motion ──────────────────────────────── */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-100: 100ms;
+  --duration-150: 150ms;
+  --duration-200: 200ms;
+  --duration-300: 300ms;
+  --duration-500: 500ms;
+
+  /* ── Typography ──────────────────────────── */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+
+  /* ── Sizing ──────────────────────────────── */
+  --sidebar-width: 220px;
+  --sidebar-width-collapsed: 60px;
+  --topbar-height: 60px;
+  --page-padding: 28px;
 }
 
-* {
+/* ═══════════════════════════════════════════════
+   Reset & Base
+   ═══════════════════════════════════════════════ */
+
+*, *::before, *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -38,11 +85,15 @@
 
 html, body {
   height: 100%;
-  font-family: var(--font);
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.6;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background: var(--bg-app);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
@@ -51,18 +102,38 @@ body {
 }
 
 a {
-  color: var(--primary);
+  color: var(--accent);
   text-decoration: none;
+  transition: color var(--duration-150) var(--ease-out);
 }
 
-img {
+a:hover {
+  color: var(--accent-hover);
+}
+
+img, svg {
   max-width: 100%;
   height: auto;
+  display: block;
 }
 
+button {
+  font-family: inherit;
+}
+
+/* ── Focus ─────────────────────────────────── */
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Scrollbar ─────────────────────────────── */
+
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -70,10 +141,56 @@ img {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--text-secondary);
-  border-radius: 3px;
+  background: var(--border-strong);
+  border-radius: var(--radius-full);
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text);
+  background: var(--text-tertiary);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ── Selection ─────────────────────────────── */
+
+::selection {
+  background: var(--accent-mid);
+  color: var(--accent);
+}
+
+/* ── Skeleton Loading ──────────────────────── */
+
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.skeleton {
+  background: var(--bg-surface);
+  border-radius: var(--radius-sm);
+  animation: skeleton-pulse 1.5s var(--ease-in-out) infinite;
+}
+
+.skeleton-text {
+  height: 14px;
+  width: 60%;
+  margin-bottom: 8px;
+}
+
+.skeleton-title {
+  height: 20px;
+  width: 40%;
+  margin-bottom: 16px;
+}
+
+.skeleton-row {
+  height: 40px;
+  width: 100%;
+  margin-bottom: 4px;
 }
