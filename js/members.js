@@ -1,5 +1,9 @@
 let membersCache = [];
 let membersSort = { field: "name", asc: true };
+const WEAPON_MASTERIES = [
+  "Bare Hands", "Sword and Shield", "Battle Staff", "Battle Shield",
+  "Greatsword", "Staff", "Dual Daggers", "Bow", "Crossbow"
+];
 
 async function loadMembers() {
   membersCache = await getCollection("members");
@@ -24,6 +28,8 @@ async function addMember(name) {
   const data = {
     name: name.trim(),
     combatPower: 0,
+    mainWeapon: "",
+    secondaryWeapon: "",
     points: 0,
     attendanceCount: 0,
     lastAttendance: null,
@@ -82,12 +88,14 @@ function getFilteredMembers() {
 
 function renderMemberRows(members) {
   if (members.length === 0) {
-    return `<tr><td colspan="3" class="empty-state">${t("noResults")}</td></tr>`;
+    return `<tr><td colspan="5" class="empty-state">${t("noResults")}</td></tr>`;
   }
   return members.map(m => `
     <tr>
       <td><a href="#" onclick="showMemberProfile('${m.id}');return false" style="text-decoration:none;color:inherit;">${escapeHtml(m.name)}</a></td>
       <td>${(m.combatPower || 0).toLocaleString()}</td>
+      <td>${escapeHtml(m.mainWeapon || "-")}</td>
+      <td>${escapeHtml(m.secondaryWeapon || "-")}</td>
       <td class="actions-cell">
         <button class="btn btn-sm btn-secondary" onclick="showEditMemberDialog('${m.id}')" data-i18n="edit">${t("edit")}</button>
         <button class="btn btn-sm btn-danger" onclick="confirmDeleteMember('${m.id}')" data-i18n="delete">${t("delete")}</button>
@@ -146,6 +154,8 @@ function renderMembersPage() {
           <tr>
             <th class="sortable-th" onclick="toggleSort('name')">${t("name")}${nameArrow}</th>
             <th class="sortable-th" onclick="toggleSort('combatPower')">${t("combatPower")}${cpArrow}</th>
+            <th>${t("mainWeapon")}</th>
+            <th>${t("secondaryWeapon")}</th>
             <th data-i18n="actions">${t("actions")}</th>
           </tr>
         </thead>
@@ -223,12 +233,24 @@ function showEditMemberDialog(id) {
   const dialog = createElement("div", "confirm-dialog");
   dialog.style.maxWidth = "420px";
 
+  const weaponOpts = '<option value="">-</option>' + WEAPON_MASTERIES.map(w => `<option value="${escapeHtml(w)}">${escapeHtml(w)}</option>`).join("");
+
   dialog.innerHTML = `
     <h3 style="margin-bottom:12px;font-size:18px;">${t("editMember")}</h3>
     <label style="display:block;font-size:13px;color:var(--text-secondary);margin-bottom:4px;">${t("name")}</label>
     <input type="text" id="editMemberInput" class="input" value="${escapeHtml(member.name)}" style="margin-bottom:12px;">
     <label style="display:block;font-size:13px;color:var(--text-secondary);margin-bottom:4px;">${t("combatPower")}</label>
     <input type="text" id="editCpInput" class="input" value="${(member.combatPower || 0).toLocaleString()}" min="0" style="margin-bottom:12px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div>
+        <label style="display:block;font-size:13px;color:var(--text-secondary);margin-bottom:4px;">${t("mainWeapon")}</label>
+        <select id="editMainWeapon" class="input" style="padding:10px 14px;">${weaponOpts}</select>
+      </div>
+      <div>
+        <label style="display:block;font-size:13px;color:var(--text-secondary);margin-bottom:4px;">${t("secondaryWeapon")}</label>
+        <select id="editSecondaryWeapon" class="input" style="padding:10px 14px;">${weaponOpts}</select>
+      </div>
+    </div>
     <div style="display:flex;gap:12px;justify-content:flex-end;">
       <button class="btn btn-secondary" id="cancelEditBtn">${t("cancel")}</button>
       <button class="btn btn-primary" id="confirmEditBtn">${t("save")}</button>
@@ -241,6 +263,10 @@ function showEditMemberDialog(id) {
 
   const nameInput = dialog.querySelector("#editMemberInput");
   const cpInput = dialog.querySelector("#editCpInput");
+  const mainWpn = dialog.querySelector("#editMainWeapon");
+  const secWpn = dialog.querySelector("#editSecondaryWeapon");
+  mainWpn.value = member.mainWeapon || "";
+  secWpn.value = member.secondaryWeapon || "";
   nameInput.focus();
   nameInput.select();
 
@@ -256,7 +282,7 @@ function showEditMemberDialog(id) {
     const name = nameInput.value.trim();
     const combatPower = parseInt(cpInput.value.replace(/,/g, ""), 10) || 0;
     const oldCp = member.combatPower || 0;
-    const updateData = { combatPower };
+    const updateData = { combatPower, mainWeapon: mainWpn.value, secondaryWeapon: secWpn.value };
     if (name && name !== member.name) {
       updateData.name = name;
     }
@@ -309,6 +335,10 @@ async function showMemberProfile(id) {
           <h3>${escapeHtml(member.name)}</h3>
           <span class="profile-cp">${t("combatPower")}: <strong>${(member.combatPower || 0).toLocaleString()}</strong></span>
         </div>
+      </div>
+      <div class="profile-weapons">
+        <span class="profile-weapon"><strong>${t("mainWeapon")}:</strong> ${escapeHtml(member.mainWeapon || "-")}</span>
+        <span class="profile-weapon"><strong>${t("secondaryWeapon")}:</strong> ${escapeHtml(member.secondaryWeapon || "-")}</span>
       </div>
       <div class="profile-section">
         <h4>${t("cpHistory")}</h4>

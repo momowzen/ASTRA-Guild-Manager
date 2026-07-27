@@ -351,8 +351,8 @@
   scrollbar-gutter: stable;
 }
 
-#membersPage.page-active .table th:nth-child(3),
-#membersPage.page-active .table td:nth-child(3) {
+#membersPage.page-active .table th:nth-child(5),
+#membersPage.page-active .table td:nth-child(5) {
   width: 160px;
 }
 
@@ -361,7 +361,7 @@
   text-align: center;
 }
 
-#membersPage.page-active .table th:nth-child(3) {
+#membersPage.page-active .table th:nth-child(5) {
   color: transparent;
 }
 

@@ -99,6 +99,8 @@ const LANG = {
     uploadError: "Please upload a PNG or JPG image",
     clickToView: "CLICK TO VIEW",
     combatPower: "Combat Power",
+    mainWeapon: "Main Weapon",
+    secondaryWeapon: "Secondary Weapon",
     cpHistory: "Combat Power History",
     noChange: "No change",
     date: "Date",
@@ -205,6 +207,8 @@ const LANG = {
     uploadError: "PNG 또는 JPG 이미지를 업로드해주세요",
     clickToView: "클릭하여 보기",
     combatPower: "전투력",
+    mainWeapon: "주 무기",
+    secondaryWeapon: "보조 무기",
     cpHistory: "전투력 변동 기록",
     noChange: "변경 없음",
     date: "날짜"
@@ -310,6 +314,8 @@ const LANG = {
     uploadError: "PNGまたはJPG画像をアップロードしてください",
     clickToView: "クリックして表示",
     combatPower: "戦闘力",
+    mainWeapon: "メイン武器",
+    secondaryWeapon: "サブ武器",
     cpHistory: "戦闘力の履歴",
     noChange: "変更なし",
     date: "日付"
