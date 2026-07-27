@@ -200,7 +200,7 @@
   flex-shrink: 0;
 }
 
-#dashboardPage.page-active > .dashboard-panel:last-child {
+#dashboardPage.page-active .dashboard-grid:last-child {
   flex: 1;
   min-height: 0;
 }
