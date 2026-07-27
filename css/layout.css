@@ -279,13 +279,13 @@
 
 #rankingPage.page-active .table th:nth-child(4),
 #rankingPage.page-active .table td:nth-child(4) {
-  width: 170px;
+  width: 120px;
   text-align: center;
 }
 
 #rankingPage.page-active .table th:nth-child(5),
 #rankingPage.page-active .table td:nth-child(5) {
-  width: 150px;
+  width: 120px;
   text-align: center;
 }
 

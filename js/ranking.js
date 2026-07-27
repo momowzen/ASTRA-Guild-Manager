@@ -12,8 +12,8 @@ function renderRankingPage() {
             <th data-i18n="rank">${t("rank")}</th>
             <th data-i18n="member">${t("member")}</th>
             <th data-i18n="points">${t("points")}</th>
+            <th>${t("combatPower")}</th>
             <th data-i18n="attendanceCount">${t("attendanceCount")}</th>
-            <th data-i18n="lastAttendance">${t("lastAttendance")}</th>
           </tr>
         </thead>
         <tbody>
@@ -30,8 +30,8 @@ function renderRankingPage() {
           <td class="rank-cell ${rankClass}">${rank}</td>
           <td>${escapeHtml(m.name)}</td>
           <td class="points-cell">${m.points || 0}</td>
+          <td>${(m.combatPower || 0).toLocaleString()}</td>
           <td>${m.attendanceCount || 0}</td>
-          <td>${m.lastAttendance ? formatDate(m.lastAttendance) : "-"}</td>
         </tr>
       `;
     });
