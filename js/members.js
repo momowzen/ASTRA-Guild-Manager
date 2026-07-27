@@ -1,9 +1,25 @@
 let membersCache = [];
 let membersSort = { field: "name", asc: true };
 const WEAPON_MASTERIES = [
-  "Bare Hands", "Sword and Shield", "Battle Staff", "Battle Shield",
-  "Greatsword", "Staff", "Dual Daggers", "Bow", "Crossbow"
+  { id: "bare_hands", en: "Bare Hands", ja: "素手", ko: "맨손" },
+  { id: "sword_and_shield", en: "Sword and Shield", ja: "剣と盾", ko: "검과 방패" },
+  { id: "battle_staff", en: "Battle Staff", ja: "戦棒", ko: "전투봉" },
+  { id: "battle_shield", en: "Battle Shield", ja: "戦闘盾", ko: "전투 방패" },
+  { id: "greatsword", en: "Greatsword", ja: "大剣", ko: "대검" },
+  { id: "staff", en: "Staff", ja: "杖", ko: "지팡이" },
+  { id: "dual_daggers", en: "Dual Daggers", ja: "短剣", ko: "단검" },
+  { id: "bow", en: "Bow", ja: "弓", ko: "활" },
+  { id: "crossbow", en: "Crossbow", ja: "クロスボウ", ko: "석궁" }
 ];
+
+function getWeaponName(wpn) {
+  if (!wpn) return "-";
+  const found = WEAPON_MASTERIES.find(w => w.en === wpn || w.id === wpn);
+  if (!found) return wpn;
+  if (currentLang === "ko") return found.ko || found.en;
+  if (currentLang === "ja") return found.ja || found.en;
+  return found.en;
+}
 
 async function loadMembers() {
   membersCache = await getCollection("members");
@@ -94,8 +110,8 @@ function renderMemberRows(members) {
     <tr onclick="showMemberProfile('${m.id}')" style="cursor:pointer;">
       <td>${escapeHtml(m.name)}</td>
       <td>${(m.combatPower || 0).toLocaleString()}</td>
-      <td>${escapeHtml(m.mainWeapon || "-")}</td>
-      <td>${escapeHtml(m.secondaryWeapon || "-")}</td>
+      <td>${getWeaponName(m.mainWeapon)}</td>
+      <td>${getWeaponName(m.secondaryWeapon)}</td>
       <td class="actions-cell">
         <button class="btn btn-sm btn-secondary" onclick="event.stopPropagation();showEditMemberDialog('${m.id}')" data-i18n="edit">${t("edit")}</button>
         <button class="btn btn-sm btn-danger" onclick="event.stopPropagation();confirmDeleteMember('${m.id}')" data-i18n="delete">${t("delete")}</button>
@@ -233,7 +249,7 @@ function showEditMemberDialog(id) {
   const dialog = createElement("div", "confirm-dialog");
   dialog.style.maxWidth = "420px";
 
-  const weaponOpts = '<option value="">-</option>' + WEAPON_MASTERIES.map(w => `<option value="${escapeHtml(w)}">${escapeHtml(w)}</option>`).join("");
+  const weaponOpts = '<option value="">-</option>' + WEAPON_MASTERIES.map(w => `<option value="${escapeHtml(w.en)}">${getWeaponName(w.en)}</option>`).join("");
 
   dialog.innerHTML = `
     <h3 style="margin-bottom:12px;font-size:18px;">${t("editMember")}</h3>
@@ -337,8 +353,8 @@ async function showMemberProfile(id) {
         </div>
       </div>
       <div class="profile-weapons">
-        <span class="profile-weapon"><strong>${t("mainWeapon")}:</strong> ${escapeHtml(member.mainWeapon || "-")}</span>
-        <span class="profile-weapon"><strong>${t("secondaryWeapon")}:</strong> ${escapeHtml(member.secondaryWeapon || "-")}</span>
+        <span class="profile-weapon"><strong>${t("mainWeapon")}:</strong> ${getWeaponName(member.mainWeapon)}</span>
+        <span class="profile-weapon"><strong>${t("secondaryWeapon")}:</strong> ${getWeaponName(member.secondaryWeapon)}</span>
       </div>
       <div class="profile-section">
         <h4>${t("cpHistory")}</h4>
